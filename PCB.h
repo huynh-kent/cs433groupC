@@ -25,5 +25,21 @@ public:
 	ProcState state;
 
 	// TODO: Add constructor and other necessary functions for the PCB class
+	
+	//Constructor
+	PCB();
+	~PCB();
+	
+	// Function to set PCB state as READY
+	void PCB::stateReady();
+
+	// Function to set PCB state as RUNNING
+	void PCB::stateRunning();
+
+	// Function to set PCB state as WAITING
+	void PCB::stateWaiting();
+
+	// Function to set PCB state as TERMINATED
+	void PCB::stateTerminated();
 };
 
