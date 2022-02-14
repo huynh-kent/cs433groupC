@@ -11,24 +11,25 @@
  * can be selected next.
  */
 class ReadyQueue {
-//private
-//	
+private:
+//Size of the queue
+int queueSize;
+	
 public:
-	// TODO: Implement the required functions. Add necessary member fields and functions
-	
-	
-	// You may use different parameter signatures from the example below
-	
-	// add a PCB representing a process into the ready queue.
-	void addPCB(PCB* pcbPtr);
+// TODO: Implement the required functions. Add necessary member fields and functions
 
-	// remove and return the PCB with the highest priority from the queue
-	PCB* removePCB();
+// You may use different parameter signatures from the example below
 
-	// Returns the number of elements in the queue.
-	int size();
+// add a PCB representing a process into the ready queue.
+void addPCB(PCB* pcbPtr);
 
-	// Prints the queue contents to standard output.
-	void display();
+// remove and return the PCB with the highest priority from the queue
+PCB* removePCB();
+
+// Returns the number of elements in the queue.
+int size();
+
+// Prints the queue contents to standard output.
+void display();
 
 };
