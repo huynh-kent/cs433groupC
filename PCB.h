@@ -41,5 +41,11 @@ public:
 
 	// Function to set PCB state as TERMINATED
 	void PCB::stateTerminated();
+	
+	// Function to return ID
+	int returnID();
+	
+	// Function to return priority
+	int returnPriority();
 };
 
