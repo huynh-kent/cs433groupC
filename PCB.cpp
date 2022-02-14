@@ -33,3 +33,13 @@ void PCB::stateWaiting() {
 void PCB::stateTerminated() {
   ProcState = TERMINATED;
 }
+
+// Return PCB ID
+int PCB::returnID() {
+  return id;
+}
+	
+// Return PCB priority
+int PCB::returnPriority() {
+ return priority; 
+}
