@@ -47,7 +47,7 @@ int PCB::returnPriority() {
 }
 
 // Return state
-ProcState PCB::getState()
+ProcState PCB::returnState()
 {
     return state;
 }
