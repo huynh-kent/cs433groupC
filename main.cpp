@@ -20,6 +20,8 @@ int main(int argc, char* argv[]) {
 	// Call readyQueue
 	ReadyQueue q1, q2;
 	
+	q1.size(50);
+	
 	//TODO: add processes 14, 1, 28, 39 and 18 to q1. Display the content of q1
 	
 	//TODO: remove one process with the highest priority from q1 and display q1.
