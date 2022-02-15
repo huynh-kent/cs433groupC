@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
 	
 	// Call readyQueue
 	ReadyQueue q1(50);
+	ReadyQueue q1(100);
 	
 	//TODO: add processes 14, 1, 28, 39 and 18 to q1. Display the content of q1
 	PCB process1(14, 14, NEW); 
