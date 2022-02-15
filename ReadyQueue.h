@@ -13,31 +13,32 @@
  */
 
 // function to swap two pcbs
-void swapPCBs(int *a, int *b);
+void swapPCBs(PCB *a, PCB *b);
 
 class ReadyQueue {
 private:
-
 int queueSize; //size of queue
-int *arr; // pointer to elements in array queue
-int arraySize; // size of array
+PCB pcbArray[]; //pcb array
+
 	
 public:
 // TODO: Implement the required functions. Add necessary member fields and functions
+
 // constructor
-ReadyQueue(int arraySize);
+ReadyQueue(int);
 // deconstructor
 ~ReadyQueue();
+
 // You may use different parameter signatures from the example below
 
 // add a PCB representing a process into the ready queue.
-void addPCB(int p);
+void addPCB(PCB p);
 
 // sort queue from given index i
 void sortQueue(int i);
 
 // remove and return the PCB with the highest priority from the queue
-int removePCB();
+void removePCB();
 
 // Returns the number of elements in the queue.
 int size();
