@@ -3,6 +3,13 @@ using namespace std;
 
 // TODO: Add your implementation here
 
+// Default Constructor
+PCB::PCB() {
+  ProcState = NEW; //initialize the process state as NEW
+  id = 0;
+  priority = 0;
+}
+
 // Constructor
 PCB::PCB(x, p) {
   ProcState = NEW; //initialize the process state as NEW
@@ -14,24 +21,19 @@ PCB::PCB(x, p) {
 PCB::~PCB() {
 }
 
-// Sets PCB state as READY
-void PCB::stateReady() {
-  ProcState = READY;
+void PCB::setID(int newId)
+{
+    id = newId;
 }
 
-// Sets PCB state as RUNNING
-void PCB::stateRunning() {
-  ProcState = RUNNING;
+void PCB::setPriority(int newPriority)
+{
+    intPriority = newPriority;
 }
 
-// Sets PCB state as WAITING
-void PCB::stateWaiting() {
-  ProcState = WAITING;
-}
-
-// Sets PCB state as TERMINATED
-void PCB::stateTerminated() {
-  ProcState = TERMINATED;
+void PCB::setState(ProcState newState)
+{
+    state = newState;
 }
 
 // Return PCB ID
@@ -42,4 +44,10 @@ int PCB::returnID() {
 // Return PCB priority
 int PCB::returnPriority() {
  return priority; 
+}
+
+// Return state
+ProcState PCB::getState()
+{
+    return state;
 }
