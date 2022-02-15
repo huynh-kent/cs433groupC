@@ -28,24 +28,25 @@ public:
 	
 	//Constructor
 	PCB();
+	PCB(int, int, processStates);
 	~PCB();
 	
-	// Function to set PCB state as READY
-	void PCB::stateReady();
-
-	// Function to set PCB state as RUNNING
-	void PCB::stateRunning();
-
-	// Function to set PCB state as WAITING
-	void PCB::stateWaiting();
-
-	// Function to set PCB state as TERMINATED
-	void PCB::stateTerminated();
+	// Function to set ID
+	void setID(int);
+	
+	// Function to set priority
+	void setPriority(int);
+	
+	// Function to set state
+	void setState(ProcState);
 	
 	// Function to return ID
 	int returnID();
 	
 	// Function to return priority
 	int returnPriority();
+	
+	// Function to return state
+	ProcState getState();
 };
 
