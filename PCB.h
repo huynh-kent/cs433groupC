@@ -17,9 +17,9 @@ It may also have other attributes, such as scheduling information (e.g. priority
 class PCB {
 public:
     // The unique process ID
-	unsigned int id;
+	int id;
     // The priority of a process valued between 1-50. Larger number represents higher priority
-	unsigned int priority;
+	int priority;
 	// The current state of the process.
 	// A process in the ReadyQueue should be in READY state
 	ProcState state;
