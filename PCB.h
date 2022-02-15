@@ -47,6 +47,6 @@ public:
 	int returnPriority();
 	
 	// Function to return state
-	ProcState getState();
+	ProcState returnState();
 };
 
