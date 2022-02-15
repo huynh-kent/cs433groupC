@@ -1,53 +1,41 @@
 using namespace std;
 #include "PCB.h"
 
+
 // TODO: Add your implementation here
 
 // Default Constructor
 PCB::PCB() {
-  state; //initialize the process state as NEW
+  ProcState state; //initialize the process state as NEW
   id = 0;
   priority = 0;
 }
 
+
 // Constructor
-PCB::PCB(int x, int p, ProcState newState) {
+PCB::PCB(int newID, int newPriority, ProcState newState) {
   state = newState; //initialize the process state as NEW
-  id = x;
-  priority = p;
+  id = newID;
+  priority = newPriority;
 }
 
 // Destructor
-PCB::~PCB() {
-}
+//PCB::~PCB() {
+//}
 
-void PCB::setID(int newId)
-{
-    id = newId;
-}
+//void PCB::setID(int newId) { id = newId; }
 
-void PCB::setPriority(int newPriority)
-{
-    priority = newPriority;
-}
+//void PCB::setPriority(int newPriority) { priority = newPriority; }
 
-void PCB::setState(ProcState newState)
-{
-    state = newState;
-}
+void PCB::setReady() { state = READY; }
+
+void PCB::setRunning() { state = RUNNING;}
 
 // Return PCB ID
-int PCB::returnID() {
-  return id;
-}
+int PCB::returnID() {   return id; }
 	
 // Return PCB priority
-int PCB::returnPriority() {
-  return priority; 
-}
+int PCB::returnPriority() {return priority; }
 
 // Return state
-ProcState PCB::returnState()
-{
-  return state;
-}
+ProcState PCB::returnState(){ return state; }
