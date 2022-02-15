@@ -29,6 +29,11 @@ int main(int argc, char* argv[]) {
 	q1.display();
 	
 	//TODO: add additional processes 48, 10, 31 and 19 into q1, and display q1.
+	PCB process1(14, 14, NEW); 
+	PCB process2(1, 1, NEW); 
+	PCB process3(28, 28, NEW); 
+	PCB process4(39, 39, NEW); 
+	PCB process5(18, 18, NEW); 
 	
 	//TODO: remove one process with the highest priority from q1 and display q1.
 	q1.remove();
