@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 	std::cout << "Performing Test 1" << std::endl;
 	
 	// Call readyQueue
-	ReadyQueue q1;
+	ReadyQueue q1(50);
 	
 	q1.size(50);
 	
