@@ -39,6 +39,15 @@ void ReadyQueue::addPCB(PCB p) {
 
 // Remove and run PCB with highest queue priority
 void ReadyQueue::removePCB(){
+    if (queueSize <= 0) {
+        cout << "Queue is Empty" << endl;
+        return;
+    }
+    if (queueSize == 1) {
+        pcbArray[0].setRunning();
+        queueSize--;
+        return;
+    }
     //set state to running
     pcbArray[0].setRunning();
   // remove max priority pcb and remove from queue then resort queue
