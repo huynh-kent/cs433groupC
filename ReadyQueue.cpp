@@ -71,7 +71,9 @@ int ReadyQueue::size() {
 
 // Displays content of the Queue
 void ReadyQueue::display() {
+  cout << "PCB queue: \n___________________________________\n" <<
+    << "ID \t Priority \t State" << endl;
   for (int i = 0; i < size(); i++) {
-    //cout << returnID() << "\t" << returnPriority() << endl;
+    cout << arr[i].returnID() << "\t" << arr[i].returnPriority() << "\t" << arr[i].returnState() << endl;
   }
 }
