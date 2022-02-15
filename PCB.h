@@ -1,4 +1,5 @@
 #pragma once
+using namespace std;
 
 // Remember to add comments to your code
 // ...
@@ -6,7 +7,7 @@
 // enum class of process state
 // A process (PCB) in ready queue should be in READY state
 
-enum class ProcState {NEW, READY, RUNNING, WAITING, TERMINATED};
+enum ProcState {NEW, READY, RUNNING, WAITING, TERMINATED};
 
 /* 
 Process control block(PCB) is a data structure representing a process in the system.
@@ -28,8 +29,9 @@ public:
 	
 	//Constructor
 	PCB();
+
 	PCB(int, int, ProcState);
-	~PCB();
+	//~PCB();
 	
 	// Function to set ID
 	void setID(int);
@@ -38,7 +40,9 @@ public:
 	void setPriority(int);
 	
 	// Function to set state
-	void setState(ProcState);
+	void setReady();
+
+	void setRunning();
 	
 	// Function to return ID
 	int returnID();
