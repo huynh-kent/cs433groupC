@@ -77,9 +77,9 @@ int main(int argc, char* argv[]) {
         //start timer 
         clock_gettime(CLOCK_MONOTONIC, &start);
         for (int i = 0; i < 1000000; i++) {
-
-			
        		//TODO: add or remove a process with equal probabilty
+		//rand();
+		//q2.add();
 	}
 	//end timer
 	clock_gettime(CLOCK_MONOTONIC, &end);
