@@ -28,7 +28,7 @@ public:
 	
 	//Constructor
 	PCB();
-	PCB(int, int, processStates);
+	PCB(int, int, ProcState);
 	~PCB();
 	
 	// Function to set ID
@@ -49,4 +49,3 @@ public:
 	// Function to return state
 	ProcState returnState();
 };
-
