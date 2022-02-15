@@ -1,50 +1,47 @@
 #include <iostream>
 #include "ReadyQueue.h"
 
+using namespace std;
 // TODO: Add your implementation of ReadyQueue functions here
 
-// constructor build an array queue with given size
+// constructor build a pcb array queue with given size
 ReadyQueue::ReadyQueue(int size) {
     queueSize = 0;
-    arraySize = size;
-    arr = new int[size];
+    PCB pcbArray[size];
 }
 
 // deconstructor
-ReadyQueue::~ReadyQueue(){
-
-}
+ReadyQueue::~ReadyQueue(){}
 
 // swaps two pcbs
-void swapPCBs(int *a, int *b) {
-    int temp = *a;
+void swapPCBs(PCB *a, PCB *b) {
+    PCB temp = *a;
     *a = *b;
     *b = temp;
 }
 
 // Add new PCB to the queue
-void ReadyQueue::addPCB(int p) {
+void ReadyQueue::addPCB(PCB p) {
     
     // insert new pcb at the end of queue
     queueSize++;
     int i = queueSize - 1;
-    arr[i] = p;
+    pcbArray[i] = p;
     
     //sort if priority is higher than parent pcb
-    while (i > 0 && arr[i] > arr[(i-1)/2]) {
-        swapPCBs(&arr[i], &arr[(i-1)/2]);
+    while (i > 0 && pcbArray[i].priority > pcbArray[(i-1)/2].priority) {
+        swapPCBs(&pcbArray[i], &pcbArray[(i-1)/2]);
         i = (i-1)/2;
     }
 }
 
 // Remove and return PCB with highest queue priority
-int ReadyQueue::removePCB(){
+void ReadyQueue::removePCB(){
   // return max priority pcb and remove from queue then resort queue
-  int maxPriority = arr[0];
-  arr[0] = arr[queueSize - 1];
+  //PCB maxPriority = pcbArray[0];
+  pcbArray[0] = pcbArray[queueSize - 1];
   queueSize--;
   sortQueue(0);
-  return maxPriority;
 }
 
 // recursive sorting starting from given index i
@@ -52,13 +49,13 @@ void ReadyQueue::sortQueue(int i){
     int higher = i;
     int left = (2*i + 1);
     int right = (2*i + 2);
-    if (left < queueSize && arr[left] > arr[i])
+    if (left < queueSize && pcbArray[left].priority > pcbArray[i].priority)
         higher = left;
-    if (right < queueSize && arr[right] > arr[i])
+    if (right < queueSize && pcbArray[right].priority > pcbArray[i].priority)
         higher = right;
 
     if (higher != i) {
-        swapPCBs(&arr[i], &arr[higher]);
+        swapPCBs(&pcbArray[i], &pcbArray[higher]);
         sortQueue(higher);
     }
 
@@ -71,9 +68,9 @@ int ReadyQueue::size() {
 
 // Displays content of the Queue
 void ReadyQueue::display() {
-  cout << "PCB queue: \n___________________________________\n" <<
-    << "ID \t Priority \t State" << endl;
+   cout << "PCB queue: \n___________________________________\n" 
+   << "ID \t Priority \t State" << endl;
   for (int i = 0; i < size(); i++) {
-    cout << arr[i].returnID() << "\t" << arr[i].returnPriority() << "\t" << arr[i].returnState() << endl;
+    cout << pcbArray[i].id << "\t" << pcbArray[i].priority << "\t" << pcbArray[i].state << endl;
   }
 }
