@@ -23,11 +23,11 @@ void swapPCBs(int *a, int *b) {
 }
 
 // Add new PCB to the queue
-void ReadyQueue::addPCB(int k) {
+void ReadyQueue::addPCB(int p) {
     
     // insert new pcb at the end of queue
     int i = queueSize - 1;
-    arr[i] = k;
+    arr[i] = p;
     queueSize++;
     
     //sort if priority is higher than parent pcb
