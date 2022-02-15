@@ -19,44 +19,66 @@ int main(int argc, char* argv[]) {
 	
 	// Call readyQueue
 	ReadyQueue q1(50);   // first test
-	ReadyQueue q2(100);  // second test
+	//ReadyQueue q2(100);  // second test
 	
 	//TODO: add processes 14, 1, 28, 39 and 18 to q1. Display the content of q1
-	PCB process1(14, 14, NEW); 
-	PCB process2(1, 1, NEW); 
-	PCB process3(28, 28, NEW); 
-	PCB process4(39, 39, NEW); 
-	PCB process5(18, 18, NEW); 
-	
-	//TODO: remove one process with the highest priority from q1 and display q1.
-	q1.remove();
+	PCB p1(14, 14, NEW);
+	q1.addPCB(p1);
+	PCB p2(1, 1, NEW);
+	q1.addPCB(p2); 
+	PCB p3(28, 28, NEW);
+	q1.addPCB(p3); 
+	PCB p4(39, 39, NEW); 
+	q1.addPCB(p4);
+	PCB p5(18, 18, NEW);
+	q1.addPCB(p5); 
 	q1.display();
-	
-	//TODO: add additional processes 48, 10, 31 and 19 into q1, and display q1.
-	PCB process6(48, 48, NEW); 
-	PCB process7(10, 10, NEW); 
-	PCB process8(31, 31, NEW); 
-	PCB process9(19, 19, NEW);
+
 	
 	//TODO: remove one process with the highest priority from q1 and display q1.
-	q1.remove();
+	q1.removePCB();
+	q1.display();
+
+	//TODO: add additional processes 48, 10, 31 and 19 into q1, and display q1.
+	PCB p6(48, 48, NEW); 
+	q1.addPCB(p6);
+	PCB p7(10, 10, NEW); 
+	q1.addPCB(p7);
+	PCB p8(31, 31, NEW); 
+	q1.addPCB(p8);
+	PCB p9(19, 19, NEW);
+	q1.addPCB(p9);
+	
+	//TODO: remove one process with the highest priority from q1 and display q1.
+	q1.removePCB();
 	q1.display();
 	
 	//TODO: add additional processes 29, 41, 18 and 46 to q1 and display q1.
-	PCB process10(29, 29, NEW); 
-	PCB process11(41, 41, NEW); 
-	PCB process12(18, 18, NEW); 
-	PCB process13(46, 46, NEW);
-	
-	//TODO: One by one remove the process with the highest priority from the queue q1 and display the queue after each removal.
+	PCB p10(29, 29, NEW); 
+	q1.addPCB(p10);
+	PCB p11(41, 41, NEW); 
+	q1.addPCB(p11);
+	PCB p12(18, 18, NEW); 
+	q1.addPCB(p12);
+	PCB p13(46, 46, NEW);
+	q1.addPCB(p13);
 
+	//TODO: One by one remove the process with the highest priority from the queue q1 and display the queue after each removal.
+	while (q1.size() != 0){
+		q1.removePCB();
+		q1.display();
+	}
 
 	// TODO: Add your code for Test 2
+
+
 	std::cout << "Performing Test 2" << std::endl;
 	struct timespec start, end;
         //start timer 
         clock_gettime(CLOCK_MONOTONIC, &start);
         for (int i = 0; i < 1000000; i++) {
+
+			
        		//TODO: add or remove a process with equal probabilty
 	}
 	//end timer
@@ -65,4 +87,5 @@ int main(int argc, char* argv[]) {
     	//Calculating total time taken by the program.
     	double time_taken = (end.tv_sec + end.tv_nsec*1e-9) - (start.tv_sec + start.tv_nsec*1e-9);
 	printf("Test 2 run time = %f seconds\n", time_taken);
+
 }
