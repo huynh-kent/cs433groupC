@@ -5,14 +5,14 @@
 
 // constructor build an array queue with given size
 ReadyQueue::ReadyQueue(int size) {
-    queueSize = -1;
+    queueSize = 0;
     arraySize = size;
     arr = new int[size];
 }
 
 // deconstructor
 ReadyQueue::~ReadyQueue(){
-    
+
 }
 
 // swaps two pcbs
@@ -26,9 +26,9 @@ void swapPCBs(int *a, int *b) {
 void ReadyQueue::addPCB(int p) {
     
     // insert new pcb at the end of queue
+    queueSize++;
     int i = queueSize - 1;
     arr[i] = p;
-    queueSize++;
     
     //sort if priority is higher than parent pcb
     while (i > 0 && arr[i] > arr[(i-1)/2]) {
@@ -39,7 +39,7 @@ void ReadyQueue::addPCB(int p) {
 
 // Remove and return PCB with highest queue priority
 int ReadyQueue::removePCB(){
-  // return max priority pcb and remove from queue
+  // return max priority pcb and remove from queue then resort queue
   int maxPriority = arr[0];
   arr[0] = arr[queueSize - 1];
   queueSize--;
