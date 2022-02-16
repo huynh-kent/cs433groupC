@@ -1,5 +1,5 @@
 // Remember to add comments to your code
-
+#include <random>
 #include <iostream>
 #include <cstdlib>
 #include <sys/time.h>
@@ -19,7 +19,6 @@ int main(int argc, char* argv[]) {
 	
 	// Call readyQueue
 	ReadyQueue q1(50);   // first test
-	//ReadyQueue q2(100);  // second test
 	
 	//TODO: add processes 14, 1, 28, 39 and 18 to q1. Display the content of q1
 	PCB p1(14, 14, NEW);
@@ -69,24 +68,43 @@ int main(int argc, char* argv[]) {
 		q1.display();
 	}
 
+	std::cout << "\n\nPerforming Test 2" << std::endl;
+	ReadyQueue q2(5000); // second test q2
+
 	// TODO: Add your code for Test 2
+	//add 100 pcbs to queue with id 1-100
+	for (int i = 0; i < 100; i++) {
+		q2.addPCB(PCB(i));
+	}
+	//display readyqueue after adding 100 processes
+	q2.display();
 
 
-	std::cout << "Performing Test 2" << std::endl;
 	struct timespec start, end;
         //start timer 
         clock_gettime(CLOCK_MONOTONIC, &start);
-        for (int i = 0; i < 1000000; i++) {
-       		//TODO: add or remove a process with equal probabilty
-		// Choosing option b to insert a process
-		//rand();
-		//q2.add();
-	}
+
+	/*
+		for (int i = 0; i < 999; i++) {
+			q2.randomInsertOrRemove();
+		//TODO: add or remove a process with equal probabilty
+		
+			int random = static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+			int oddOrEven = random % 2;
+			if (oddOrEven == 0)
+				q2.addPCB(PCB());
+			if (oddOrEven != 0)
+				q2.removePCB(); }*/
+			
 	//end timer
 	clock_gettime(CLOCK_MONOTONIC, &end);
+
+	//q2.displayUniqueID();
   
     	//Calculating total time taken by the program.
     	double time_taken = (end.tv_sec + end.tv_nsec*1e-9) - (start.tv_sec + start.tv_nsec*1e-9);
-	printf("Test 2 run time = %f seconds\n", time_taken);
+	printf("\nTest 2 run time = %f seconds\n", time_taken);
 
+	cout << "\nFinal Content of ReadyQueue" << endl;
+	cout << "\nFinal Size of Queue is: " << q2.size() << endl;
 }

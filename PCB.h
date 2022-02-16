@@ -24,24 +24,32 @@ public:
 	// The current state of the process.
 	// A process in the ReadyQueue should be in READY state
 	ProcState state;
-
+	double uniqueID;
 	// TODO: Add constructor and other necessary functions for the PCB class
 	
-	//Constructor
+	//Default constructor
 	PCB();
 
+	//Insert constructor
 	PCB(int, int, ProcState);
+	
+	//ID generated constructor
+	PCB(int);
+	PCB(double);
+
+	//Deconstructor
 	//~PCB();
 	
 	// Function to set ID
-	void setID(int);
+	void setID();
 	
 	// Function to set priority
-	void setPriority(int);
+	void setRandomPriority();
 	
-	// Function to set state
+	// Function to set to ready state
 	void setReady();
 
+	// Function to set running state
 	void setRunning();
 	
 	// Function to return ID

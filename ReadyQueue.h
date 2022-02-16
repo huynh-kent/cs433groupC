@@ -27,7 +27,7 @@ public:
 // constructor
 ReadyQueue(int);
 // deconstructor
-~ReadyQueue();
+//~ReadyQueue();
 
 // You may use different parameter signatures from the example below
 
@@ -45,6 +45,9 @@ int size();
 
 // Prints the queue contents to standard output.
 void display();
+void displayUniqueID();
 
+// randomly chooses insert or remove
+void randomInsertOrRemove();
 
 };

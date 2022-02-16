@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ReadyQueue.h"
-
+#include <cstdlib>
+#include <time.h>
 using namespace std;
 // TODO: Add your implementation of ReadyQueue functions here
 
@@ -11,7 +12,7 @@ ReadyQueue::ReadyQueue(int size) {
 }
 
 // deconstructor
-ReadyQueue::~ReadyQueue(){}
+//ReadyQueue::~ReadyQueue(){}
 
 // swaps two pcbs
 void swapPCBs(PCB *a, PCB *b) {
@@ -40,7 +41,6 @@ void ReadyQueue::addPCB(PCB p) {
 // Remove and run PCB with highest queue priority
 void ReadyQueue::removePCB(){
     if (queueSize <= 0) {
-        cout << "Queue is Empty" << endl;
         return;
     }
     if (queueSize == 1) {
@@ -66,13 +66,26 @@ void ReadyQueue::sortQueue(int i){
         higher = left;
     if (right < queueSize && pcbArray[right].priority > pcbArray[higher].priority)
         higher = right;
-
     if (higher != i) {
         swapPCBs(&pcbArray[i], &pcbArray[higher]);
         sortQueue(higher);
     }
-
 }
+
+// function to randomly decide whether to insert or remove PCB, 50/50
+void ReadyQueue::randomInsertOrRemove() {
+    double key = 0.001;
+    int random = static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+	int oddOrEven = random % 2;
+    if (oddOrEven == 0) {
+        addPCB(PCB(key));
+        key += .0000000000001;
+    }
+    else {
+        removePCB();
+    }
+ }
+
 
 // Return the queue size
 int ReadyQueue::size() {
@@ -81,10 +94,19 @@ int ReadyQueue::size() {
 
 // Displays content of the Queue
 void ReadyQueue::display() {
-if (size() == 0) { cout << "ReadyQueue is Now Empty\n"; return; }
-   cout << "\nPCB queue: \n___________________________________\n" 
-   << "ID \t Priority \t State" << endl;
+if (size() == 0) { cout << "\nReadyQueue is Now Empty\n"; return; }
+   cout << "\nReady Queue: \n___________________________________\n" 
+   << "Priority\tID \t State" << endl;
   for (int i = 0; i < size(); i++) {
-    cout << pcbArray[i].id << "\t" << pcbArray[i].priority << "\t" << pcbArray[i].state << endl;
+    cout << pcbArray[i].priority << " \t " << pcbArray[i].id << "\t\t\t" << pcbArray[i].returnState() << endl;
+  }
+}
+
+void ReadyQueue::displayUniqueID() {
+if (size() == 0) { cout << "\nReadyQueue is Now Empty\n"; return; }
+   cout << "\nReady Queue: \n___________________________________\n" 
+   << "Priority \t ID \t State" << endl;
+  for (int i = 0; i < size(); i++) {
+    cout << pcbArray[i].priority << " \t " << pcbArray[i].uniqueID << "\t\t\t" << pcbArray[i].returnState() << endl;
   }
 }
