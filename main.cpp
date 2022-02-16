@@ -69,11 +69,11 @@ int main(int argc, char* argv[]) {
 	}
 
 	std::cout << "\n\nPerforming Test 2" << std::endl;
-	ReadyQueue q2(5000); // second test q2
+	ReadyQueue q2(125); // second test q2
 
 	// TODO: Add your code for Test 2
 	//add 100 pcbs to queue with id 1-100
-	for (int i = 0; i < 100; i++) {
+	for (int i = 1; i < 101; i++) {
 		q2.addPCB(PCB(i));
 	}
 	//display readyqueue after adding 100 processes
@@ -84,27 +84,26 @@ int main(int argc, char* argv[]) {
         //start timer 
         clock_gettime(CLOCK_MONOTONIC, &start);
 
-	/*
-		for (int i = 0; i < 999; i++) {
-			q2.randomInsertOrRemove();
-		//TODO: add or remove a process with equal probabilty
-		
-			int random = static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-			int oddOrEven = random % 2;
-			if (oddOrEven == 0)
-				q2.addPCB(PCB());
-			if (oddOrEven != 0)
-				q2.removePCB(); }*/
+	
+		for (int i = 0; i < 1000000; i++) {
+			//q2.randomInsertOrRemove();
+			//TODO: add or remove a process with equal probabilty
+			int key = i * 2 + 3 + i + 7 / 3 + i / 2 * 3 * 2 * 5 * 7 / 2 / 7;
+			if ((key%2) == 0)
+				q2.addPCB(PCB(i));
+			if ((key%2) != 0)
+				q2.removePCB(); }
 			
 	//end timer
 	clock_gettime(CLOCK_MONOTONIC, &end);
-
-	//q2.displayUniqueID();
+	//print final ReadyQueue
+	q2.display();
+	cout << "\n ^Final Content of ReadyQueue^" << endl;
   
     	//Calculating total time taken by the program.
     	double time_taken = (end.tv_sec + end.tv_nsec*1e-9) - (start.tv_sec + start.tv_nsec*1e-9);
 	printf("\nTest 2 run time = %f seconds\n", time_taken);
 
-	cout << "\nFinal Content of ReadyQueue" << endl;
 	cout << "\nFinal Size of Queue is: " << q2.size() << endl;
+	return 0;
 }

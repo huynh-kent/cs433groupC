@@ -8,7 +8,7 @@ using namespace std;
 // Default Constructor
 PCB::PCB() {
   state = NEW; //initialize the process state as NEW
-  id = 100;
+  id = 0;
   priority = (rand() % 50) + 1;
 }
 
@@ -24,7 +24,7 @@ PCB::PCB(int newID, int newPriority, ProcState newState) {
 PCB::PCB(int i){
   state = NEW;
   priority = (rand() % 50) + 1;
-  id = i + 1;
+  id = i;
 }
 
 PCB::PCB(double i){

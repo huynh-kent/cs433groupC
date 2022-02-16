@@ -2,6 +2,7 @@
 #include "ReadyQueue.h"
 #include <cstdlib>
 #include <time.h>
+#include <chrono>
 using namespace std;
 // TODO: Add your implementation of ReadyQueue functions here
 
@@ -73,7 +74,7 @@ void ReadyQueue::sortQueue(int i){
 }
 
 // function to randomly decide whether to insert or remove PCB, 50/50
-void ReadyQueue::randomInsertOrRemove() {
+/*void ReadyQueue::randomInsertOrRemove() {
     double key = 0.001;
     int random = static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 	int oddOrEven = random % 2;
@@ -84,7 +85,7 @@ void ReadyQueue::randomInsertOrRemove() {
     else {
         removePCB();
     }
- }
+ }*/
 
 
 // Return the queue size
@@ -95,18 +96,18 @@ int ReadyQueue::size() {
 // Displays content of the Queue
 void ReadyQueue::display() {
 if (size() == 0) { cout << "\nReadyQueue is Now Empty\n"; return; }
-   cout << "\nReady Queue: \n___________________________________\n" 
-   << "Priority\tID \t State" << endl;
+   cout << "\n------------Ready Queue-------------\n___________________________________\n" 
+   << "ID\t   Priority \t      State" << endl;
   for (int i = 0; i < size(); i++) {
-    cout << pcbArray[i].priority << " \t " << pcbArray[i].id << "\t\t\t" << pcbArray[i].returnState() << endl;
+    cout << pcbArray[i].id << " \t    " << pcbArray[i].priority << "\t\t\t" << pcbArray[i].returnState() << endl;
   }
 }
 
-void ReadyQueue::displayUniqueID() {
+/*void ReadyQueue::displayUniqueID() {
 if (size() == 0) { cout << "\nReadyQueue is Now Empty\n"; return; }
    cout << "\nReady Queue: \n___________________________________\n" 
    << "Priority \t ID \t State" << endl;
   for (int i = 0; i < size(); i++) {
     cout << pcbArray[i].priority << " \t " << pcbArray[i].uniqueID << "\t\t\t" << pcbArray[i].returnState() << endl;
   }
-}
+}*/
