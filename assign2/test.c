@@ -10,20 +10,22 @@
 #define HISTORY_PATH "history.txt"
 #define DELIMITERS " \n\t\r\t\f" //delimiters for parsing tokens
 
-int process_wait;
-int save_c;
 char last_command[MAX_LINE];            // stores last command
 int history;                   // initializes if there is a history
+int process_wait = 1;          // initializes that parent process will wait by default
 
 //function to parse Input
 void parseInput(char *command, char **args)
 {
+    char *temp[MAX_ARGS]; // temp array to store tokens
     char parsedCommand[MAX_LINE]; //init parsedCommand
     int command_length = strlen(command);
     int count = 0;
 
     strcpy(parsedCommand, command); //copies command for parsing
     char *token = strtok(parsedCommand, DELIMITERS); //parse into tokens with delimiters
+    
+    //parse command into tokens and store in array
     while (token != NULL)
     {
         // check if command has ampersand
@@ -33,8 +35,10 @@ void parseInput(char *command, char **args)
             process_wait = 0;           //process doesnt wait
         }
 
-        // store token into arg array
-        args[count] = token;
+        // store token into temp -> args array
+        temp[count] = token;
+        args[count] = temp[count];
+
         // repeat for remaining parts of string
         // except pass NULL as argument
         token = strtok(NULL, DELIMITERS);
@@ -44,21 +48,24 @@ void parseInput(char *command, char **args)
 
     //set last argument to NULL
     args[count] = NULL;
+
+    //execvp(args[0], args);
 }
 
+//function to write last command into history.txt file
 void storeLastCommand(char *command)
 {
     strcpy(last_command, command);
-    FILE* hist = fopen(HISTORY_PATH, "a+");
-    fprintf(hist, "%s", command);
-    rewind(hist);
-    history = 1;
+    FILE* hist = fopen(HISTORY_PATH, "a+"); 
+    fprintf(hist, "%s", last_command);      //write last command in file
+    rewind(hist);                           //sets next input to be at top of file
+    history = 1; //meaning there is now a history of commands to call
 }
 
 int main(void)
 {
     char command[MAX_LINE];
-    char *args[MAX_ARGS];
+    char *args[MAX_ARGS], *args1[MAX_ARGS];
     int should_run = 1;
     int command_length = strlen(command);  //length of command
     
@@ -69,7 +76,7 @@ int main(void)
         fflush(stdout);
         fgets(command, MAX_LINE, stdin);        //reads input command
 
-        //parseInput for terminal to interpret
+        //parse command into arguments to be able to compare/check
         parseInput(command, args);
 
         if(args[0] == NULL) continue;
@@ -78,6 +85,7 @@ int main(void)
         if (!strcmp(args[0], "exit"))
         {   
             should_run = 0;
+            continue;
         }
 
         // executes last command with "!!"
@@ -97,26 +105,31 @@ int main(void)
                 continue;
             }
         }
-        else
+        else 
         {
             //fork process
             int pid = fork();
 
+            if (pid < 0)
+            {
+                printf("Fork Failed...\n");
+            }
+
             if (pid == 0)     //child process
             {
+            //parseInput for terminal to interpret
+            parseInput(command, args1);
             // call execvp()
-            execvp(args[0], args);
+            //printf("child process\n");
+            execvp(args1[0], args1);
             exit(0);
             }
             else        //parent process
             {
                 // if command ends with '&', do not wait for child process
                 // else wait for child process
+                //printf("parent process\n");
                 if (process_wait)
-                {
-                    process_wait = 0;
-                }
-                else
                     wait(NULL);
             }
         }
