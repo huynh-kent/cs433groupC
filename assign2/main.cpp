@@ -69,12 +69,12 @@ int main(void)
     int should_run = 1;
     int command_length = strlen(command);  //length of command
     
-    	printf("====================================================\n");
-	printf("Course       : CS433: Programming assignment 2\n");
-    	printf("Authors      : Kent Huynh, Daniel Martinez, and Raymond Quach\n");
-	printf("Assignment2  : Unix Shell & History Feature\n");
-	printf("Date         : 03/08/2022\n");
-	printf("====================================================\n");
+    printf("====================================================\n");
+    printf("Course       : CS433: Programming assignment 2\n");
+    printf("Authors      : Kent Huynh, Daniel Martinez, and Raymond Quach\n");
+    printf("Assignment2  : Unix Shell & History Feature\n");
+    printf("Date         : 03/08/2022\n");
+    printf("====================================================\n");
     
     while (should_run)
     {
