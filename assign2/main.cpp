@@ -19,8 +19,7 @@ void parseInput(char *command, char **args)
 {
     char *temp[MAX_ARGS]; // temp array to store tokens
     char parsedCommand[MAX_LINE]; //init parsedCommand
-    int command_length = strlen(command);
-    int count = 0;
+    int count = 0; // init count
 
     strcpy(parsedCommand, command); //copies command for parsing
     char *token = strtok(parsedCommand, DELIMITERS); //parse into tokens with delimiters
@@ -45,11 +44,9 @@ void parseInput(char *command, char **args)
 
         ++count;
     }
-
+    
     //set last argument to NULL
     args[count] = NULL;
-
-    //execvp(args[0], args);
 }
 
 //function to write last command into history.txt file
@@ -60,28 +57,42 @@ void storeLastCommand(char *command)
     fprintf(hist, "%s", last_command);      //write last command in file
     rewind(hist);                           //sets next input to be at top of file
     history = 1; //meaning there is now a history of commands to call
+
+    /***************
+     * Need a way to clear/trim history.txt so wont overflow
+     * ************/
+}
+
+//function to execute args
+void executeArgs(char **args)
+{
+    if(execvp(args[0], args) < 0)
+    {
+        printf("Invalid Command\n");
+        exit(0);
+    }
 }
 
 int main(void)
 {
-    char command[MAX_LINE];
-    char *args[MAX_ARGS], *args1[MAX_ARGS];
-    int should_run = 1;
-    int command_length = strlen(command);  //length of command
-    
-    printf("====================================================\n");
-    printf("CS433 Programming assignment 2\n");
+    printf("===================================================================\n");
+    printf("CS433 Programming Assignment 2\n");
     printf("Authors: Kent Huynh, Daniel Martinez, and Raymond Quach\n");
     printf("Course: CS433 (Operating Systems)\n");
     printf("Date: 03/08/2022\n");
-    printf("Description: This project consists of designing a C/C++ program ");
-    printf("to serve as a shell interface that accepts user commands and then executes each command in a separate process.");
-    printf("====================================================\n");
-    
+    printf("Description: This project consists of designing a C/C++ program \n");
+    printf("to serve as a shell interface that accepts user commands \n");
+    printf("and then executes each command in a separate process.\n");
+    printf("===================================================================\n");
+
+    char command[MAX_LINE];
+    char *args[MAX_ARGS], *args1[MAX_ARGS], *args_last[MAX_ARGS];
+    int should_run = 1;
+
     while (should_run)
     {
         // shell display
-        printf("groupCshell -> ");
+        printf("groupCshell ---> ");
         fflush(stdout);
         fgets(command, MAX_LINE, stdin);        //reads input command
 
@@ -103,9 +114,9 @@ int main(void)
             if (history)
             {
                 //print last command
-                printf("            -> %s", last_command);
-                //parse last command
-                parseInput(last_command, args);
+                printf("            ---> %s", last_command);
+                
+                //load last_command into current command
                 strcpy(command, last_command);
             }
             else
@@ -114,26 +125,31 @@ int main(void)
                 continue;
             }
         }
-        else 
+        
+        
+        if (args[0] != NULL)
         {
             //fork process
             int pid = fork();
 
-            if (pid < 0)
+            if (pid < 0)      //if fork fails
             {
                 printf("Fork Failed...\n");
+                exit(1);
             }
 
             if (pid == 0)     //child process
             {
-            //parseInput for terminal to interpret
-            parseInput(command, args1);
+
+            // parseInput for terminal to interpret
+                parseInput(command, args1);
             // call execvp()
-            //printf("child process\n");
-            execvp(args1[0], args1);
-            exit(0);
+            
+            // execvp(args1[0], args1);
+                executeArgs(args1);
+                exit(0);
             }
-            else        //parent process
+            else        // parent process
             {
                 // if command ends with '&', do not wait for child process
                 // else wait for child process
@@ -142,7 +158,8 @@ int main(void)
                     wait(NULL);
             }
         }
-        //store last command        
+        else  { continue; }
+        //store command -> last_command        
         storeLastCommand(command);
     }
     return 0;
