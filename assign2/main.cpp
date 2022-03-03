@@ -72,7 +72,6 @@ int main(void)
     printf("====================================================\n");
     printf("CS433 Programming assignment 2\n");
     printf("Authors: Kent Huynh, Daniel Martinez, and Raymond Quach\n");
-    printf("CS433 Programming assignment 2\n");
     printf("Course: CS433 (Operating Systems)\n");
     printf("Date: 03/08/2022\n");
     printf("Description: This project consists of designing a C/C++ program ");
