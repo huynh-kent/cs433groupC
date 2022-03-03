@@ -44,7 +44,7 @@ void parseInput(char *command, char **args)
 
         ++count;
     }
-    
+
     //set last argument to NULL
     args[count] = NULL;
 }
@@ -71,6 +71,14 @@ void executeArgs(char **args)
         printf("Invalid Command\n");
         exit(0);
     }
+}
+
+//function to redirect input and output
+void redirectIO()
+{
+    /**
+    *   Need function to redirect input/output Part IV
+    **/
 }
 
 int main(void)
@@ -143,8 +151,8 @@ int main(void)
 
             // parseInput for terminal to interpret
                 parseInput(command, args1);
+
             // call execvp()
-            
             // execvp(args1[0], args1);
                 executeArgs(args1);
                 exit(0);
@@ -158,7 +166,8 @@ int main(void)
                     wait(NULL);
             }
         }
-        else  { continue; }
+        else  
+            { continue; }
         //store command -> last_command        
         storeLastCommand(command);
     }
