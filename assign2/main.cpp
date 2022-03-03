@@ -70,10 +70,13 @@ int main(void)
     int command_length = strlen(command);  //length of command
     
     printf("====================================================\n");
-    printf("Course       : CS433: Programming assignment 2\n");
-    printf("Authors      : Kent Huynh, Daniel Martinez, and Raymond Quach\n");
-    printf("Assignment2  : Unix Shell & History Feature\n");
-    printf("Date         : 03/08/2022\n");
+    printf("CS433 Programming assignment 2\n");
+    printf("Authors: Kent Huynh, Daniel Martinez, and Raymond Quach\n");
+    printf("CS433 Programming assignment 2\n");
+    printf("Course: CS433 (Operating Systems)\n");
+    printf("Date: 03/08/2022\n");
+    printf("Description: This project consists of designing a C/C++ program ");
+    printf("to serve as a shell interface that accepts user commands and then executes each command in a separate process.");
     printf("====================================================\n");
     
     while (should_run)
