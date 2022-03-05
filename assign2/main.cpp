@@ -4,34 +4,38 @@
 #include <sys/wait.h> //parent process wait
 #include <stdlib.h> // for exiting process exit()
 
+// used to open/write/read files
+#include <fcntl.h> 
+#include <sys/types.h>
+#include <sys/stat.h>
 
-#define MAX_LINE 80 /* the maximum length command */
-#define MAX_ARGS 40 // max args is maxline divided by 2
-#define HISTORY_PATH "history.txt"
-#define DELIMITERS " \n\t\r\t\f" //delimiters for parsing tokens
+
+#define MAX_LINE 80                 /* the maximum length command */
+#define MAX_ARGS 40                 // max args is maxline divided by 2
+#define HISTORY_PATH "history.txt"  //  history file path
+#define DELIMITERS " \n\t\r\t\f"    // delimiters for parsing tokens
 
 char last_command[MAX_LINE];            // stores last command
 int history;                   // initializes if there is a history
-int process_wait = 1;          // initializes that parent process will wait by default
+int process_wait;               //if processes waits
 
 //function to parse Input
 void parseInput(char *command, char **args)
 {
-    char *temp[MAX_ARGS]; // temp array to store tokens
-    char parsedCommand[MAX_LINE]; //init parsedCommand
-    int count = 0; // init count
+    char *temp[MAX_ARGS];           // temp array to store tokens
+    char parsedCommand[MAX_LINE];   //init parsedCommand
+    int count = 0;                  // init count
 
-    strcpy(parsedCommand, command); //copies command for parsing
+    strcpy(parsedCommand, command);                   //copies command for parsing
     char *token = strtok(parsedCommand, DELIMITERS); //parse into tokens with delimiters
     
     //parse command into tokens and store in array
     while (token != NULL)
     {
         // check if command has ampersand
-        if(*token == '&')
+        if (*token == '&')
         {
-            printf("-has ampersand- \n"); //test print
-            process_wait = 0;           //process doesnt wait
+            process_wait = 0;  //   process doesnt wait
         }
 
         // store token into temp -> args array
@@ -56,7 +60,7 @@ void storeLastCommand(char *command)
     FILE* hist = fopen(HISTORY_PATH, "a+"); 
     fprintf(hist, "%s", last_command);      //write last command in file
     rewind(hist);                           //sets next input to be at top of file
-    history = 1; //meaning there is now a history of commands to call
+    history = 1;                            //history = true
 
     /***************
      * Need a way to clear/trim history.txt so wont overflow
@@ -69,16 +73,7 @@ void executeArgs(char **args)
     if(execvp(args[0], args) < 0)
     {
         printf("Invalid Command\n");
-        exit(0);
     }
-}
-
-//function to redirect input and output
-void redirectIO()
-{
-    /**
-    *   Need function to redirect input/output Part IV
-    **/
 }
 
 int main(void)
@@ -94,8 +89,9 @@ int main(void)
     printf("===================================================================\n");
 
     char command[MAX_LINE];
-    char *args[MAX_ARGS], *args1[MAX_ARGS], *args_last[MAX_ARGS];
+    char *args[MAX_ARGS];
     int should_run = 1;
+    int input_fd, output_fd, copy_input, copy_output;
 
     while (should_run)
     {
@@ -103,6 +99,10 @@ int main(void)
         printf("groupCshell ---> ");
         fflush(stdout);
         fgets(command, MAX_LINE, stdin);        //reads input command
+
+        process_wait = 1;                      // initializes that parent process will wait by default
+        int input_file = -1, output_file = -1; //init files
+        int redirect = 0;                      //init redirect var
 
         //parse command into arguments to be able to compare/check
         parseInput(command, args);
@@ -121,11 +121,14 @@ int main(void)
         {
             if (history)
             {
-                //print last command
+                //  print last command
                 printf("            ---> %s", last_command);
                 
-                //load last_command into current command
+                //  load last_command into current command
                 strcpy(command, last_command);
+
+                //  parse updated command
+                parseInput(command, args);
             }
             else
             {
@@ -133,8 +136,66 @@ int main(void)
                 continue;
             }
         }
+
+        //check for redirecting input & output
+        for (int i = 0;(args[i] != NULL); ++i)
+        {
+            if (!strcmp(args[i], "<"))
+            {
+                input_file = i + 1; // arg after '<'
+                args[i] = NULL;     // remove '<'
+            }
+            else if (!strcmp(args[i], ">"))
+            {
+                output_file = i + 1; // arg after '>'
+                args[i] = NULL;      // remove '>'
+            }
+        }
         
-        
+        //  if input redirect
+        if (input_file != -1)
+        {
+            //  open file to be used as input
+            input_fd = open(args[input_file], O_RDONLY, 644);
+            if (input_fd < 0)
+            {
+                printf("Error Opening INPUT File\n");
+                continue;
+            }
+            else
+            {
+                copy_input = dup(STDIN_FILENO);        //  creates copy of input fd
+                dup2(input_fd, STDIN_FILENO);        //  copies input fd to STD in
+                close(input_fd);                    // close input fd since already copied
+
+                redirect = 1;
+            }
+        }
+        //  if output redirect
+        else if (output_file != -1)
+        { 
+            //  open file where output goes
+            output_fd = open(args[output_file], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (output_fd < 0)
+            {
+                printf("Error Opening OUTPUT File\n");
+                continue;
+            }
+            else
+            {
+                // creates copy of stdout fd
+                copy_output = dup(STDOUT_FILENO);
+
+                // copy outputFD to STDOUT
+                dup2(output_fd, STDOUT_FILENO);
+
+                // close outputFD since already copied
+                close(output_fd);
+
+                redirect = 1;
+            }
+        }
+        // process forking
         if (args[0] != NULL)
         {
             //fork process
@@ -148,28 +209,35 @@ int main(void)
 
             if (pid == 0)     //child process
             {
-
-            // parseInput for terminal to interpret
-                parseInput(command, args1);
-
-            // call execvp()
-            // execvp(args1[0], args1);
-                executeArgs(args1);
-                exit(0);
+                // if redirectI/O, execute without parsing
+                if (redirect) {
+                    executeArgs(args);
+                }
+                //  else parse then execute
+                else {
+                    parseInput(command, args);
+                    executeArgs(args);
+                }
             }
-            else        // parent process
+            else         // parent process
             {
                 // if command ends with '&', do not wait for child process
                 // else wait for child process
-                //printf("parent process\n");
                 if (process_wait)
                     wait(NULL);
             }
+            
         }
         else  
-            { continue; }
+        { continue; }
         //store command -> last_command        
         storeLastCommand(command);
+
+        //closes stdin/stdout fd
+        if (input_file != -1)
+            dup2(copy_input, STDIN_FILENO);
+        else if (output_file != -1) 
+            dup2(copy_output, STDOUT_FILENO);
     }
     return 0;
 }
