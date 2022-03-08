@@ -18,6 +18,7 @@
 char last_command[MAX_LINE];            // stores last command
 int history;                   // initializes if there is a history
 int process_wait;               //if processes waits
+int line_count;                // history line count
 
 //function to parse Input
 void parseInput(char *command, char **args)
@@ -61,10 +62,6 @@ void storeLastCommand(char *command)
     fprintf(hist, "%s", last_command);      //write last command in file
     rewind(hist);                           //sets next input to be at top of file
     history = 1;                            //history = true
-
-    /***************
-     * Need a way to clear/trim history.txt so wont overflow
-     * ************/
 }
 
 //function to execute args
