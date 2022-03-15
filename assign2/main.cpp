@@ -23,8 +23,13 @@ int line_count;                // history line count
 //function to parse Input
 void parseInput(char *command, char **args)
 {
+<<<<<<< HEAD
     char *temp[MAX_ARGS + 1];           // temp array to store tokens
     char parsedCommand[MAX_LINE + 1];   //init parsedCommand
+=======
+    char *temp[MAX_ARGS];           // temp array to store tokens
+    char parsedCommand[MAX_LINE];   //init parsedCommand
+>>>>>>> 933f6b6a300faf20c35f29bdd0ab023c941d17c5
     int count = 0;                  // init count
 
     strcpy(parsedCommand, command);                   //copies command for parsing
@@ -70,7 +75,10 @@ void executeArgs(char **args)
     if(execvp(args[0], args) < 0)
     {
         printf("Invalid Command\n");
+<<<<<<< HEAD
         exit(1);
+=======
+>>>>>>> 933f6b6a300faf20c35f29bdd0ab023c941d17c5
     }
 }
 
@@ -111,7 +119,11 @@ int main(void)
         if (!strcmp(args[0], "exit"))
         {   
             should_run = 0;
+<<<<<<< HEAD
             exit(0);
+=======
+            continue;
+>>>>>>> 933f6b6a300faf20c35f29bdd0ab023c941d17c5
         }
 
         // executes last command with "!!"
@@ -226,6 +238,11 @@ int main(void)
             }
             
         }
+<<<<<<< HEAD
+=======
+        else  
+        { continue; }
+>>>>>>> 933f6b6a300faf20c35f29bdd0ab023c941d17c5
         //store command -> last_command        
         storeLastCommand(command);
 
@@ -236,4 +253,8 @@ int main(void)
             dup2(copy_output, STDOUT_FILENO);
     }
     return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 933f6b6a300faf20c35f29bdd0ab023c941d17c5
