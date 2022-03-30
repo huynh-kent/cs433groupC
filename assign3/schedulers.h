@@ -6,3 +6,8 @@ void add(char *name, int priority, int burst);
 
 // invoke the scheduler
 void schedule();
+
+// invoke RR scheduler
+void scheduleRR(char *argQuantum);
+
+void addPrint(char *name, int turnaround, int waiting);
