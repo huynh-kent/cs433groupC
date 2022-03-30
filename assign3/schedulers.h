@@ -10,4 +10,5 @@ void schedule();
 // invoke RR scheduler
 void scheduleRR(char *argQuantum);
 
+// add task to print list
 void addPrint(char *name, int turnaround, int waiting);

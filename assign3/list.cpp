@@ -9,6 +9,7 @@
 #include "list.h"
 #include "task.h"
 
+// init print head
 struct node *print_head = NULL;
 
 // add a new task to end of list of tasks
@@ -80,6 +81,7 @@ void traverse(struct node *head) {
     }
 }
 
+// add tasks to a separate printing list with their turnaround/waiting time
 void addPrint(char *name, int turnaround, int waiting)
 {
 	Task *finishTask = (Task *) malloc(sizeof(Task));
@@ -90,12 +92,15 @@ void addPrint(char *name, int turnaround, int waiting)
 	insert(&print_head, finishTask);
 }
 
+
+// print turnaround and waiting time of each task
 void printTimes()
 {
     struct node *temp;
     temp = print_head;
     int total_turnaround = 0, total_waiting = 0, task_count = 0;
 
+    // print all finished tasks
     while (temp != NULL)
     {
         printf("[%s], turnaround time = %d, waiting time = %d\n", temp->task->name, temp->task->turnaround_time, temp->task->waiting_time);
@@ -105,5 +110,7 @@ void printTimes()
         task_count++;
     }
 
+    // average turnaround time and average waiting time
+    printf("---------------------------------\n");
     printf("Average Turnaround Time - %.2f\nAverage Waiting Time - %.2f\n", (float(total_turnaround)/task_count), (float(total_waiting)/task_count));
 }

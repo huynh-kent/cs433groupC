@@ -40,8 +40,8 @@ void schedule()
 
 	while (head != NULL)
 	{
+		// run task
 		runThisTask = head->task;
-	
 		run(runThisTask, runThisTask->burst);
 
 		// calculate turnaround and waiting times and to print list
@@ -49,10 +49,12 @@ void schedule()
 		waiting = turnaround - runThisTask->burst;
 		addPrint(runThisTask->name, turnaround, waiting);
 
+		// remove task from list
 		remove(&head, runThisTask);
 	}
-
-	printf("No more tasks\n");
+	
+	// finished running tasks
+	printf("----------No more tasks----------\n");
 
 }
 

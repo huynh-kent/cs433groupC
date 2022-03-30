@@ -55,13 +55,13 @@ int main(int argc, char *argv[])
 
     fclose(in);
 
-    // if quantum arguement
-    if (argc == 3)
-    { scheduleRR(argv[2]); }
-    else // invoke the scheduler
-    { schedule(); }
+    // if there is quantum arguement
+    if (argc == 3) { // invoke special RR scheduler
+        scheduleRR(argv[2]); }
+    else { // invoke the normal scheduler 
+        schedule(); }
 
-    // print times
+    // print times of tasks
     printTimes();
 
     return 0;
