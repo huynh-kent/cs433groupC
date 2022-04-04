@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     std::cout << "Description : Schedule a set of Tasks with different scheduling algorithms." << std::endl;
     std::cout << "FCFS, SJF, Priority, and RR" << std::endl;
     std::cout << "Returning each task's turnaround and waiting time, as well as the average for that specific scheduling algorithm." << std::endl;
-    std::cout << "Compile the specific algorithm using 'make (Enter Algorithm Here)' with the algorithms being 'fcfs', 'sjf', 'Priority', 'rr'." << std::endl;
+    std::cout << "Compile the specific algorithm using 'make (Enter Algorithm Here)' with the algorithms being 'fcfs', 'sjf', 'priority', 'rr'." << std::endl;
     std::cout << "For RR, to enter the desired Quantum Slice, enter it as an argument after the scheduler file." << std::endl;
     std::cout << "Example: './rr scheduler.txt 9' for a Quantum Slice of 9." << std::endl;
     std::cout << "=================================" << std::endl;
