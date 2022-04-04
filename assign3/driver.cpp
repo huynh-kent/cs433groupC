@@ -24,10 +24,15 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     std::cout << "CS 433 Programming assignment 3" << std::endl;
-    std::cout << "Author: xxxxxx and xxxxxxx" << std::endl;
-    std::cout << "Date: xx/xx/2022" << std::endl;
+    std::cout << "Authors: Kent Huynh, Daniel Martinez, and Raymond Quach" << std::endl;
+    std::cout << "Date: 04/05/2022" << std::endl;
     std::cout << "Course: CS433 (Operating Systems)" << std::endl;
-    std::cout << "Description : **** " << std::endl;
+    std::cout << "Description : Schedule a set of Tasks with different scheduling algorithms." << std::endl;
+    std::cout << "FCFS, SJF, Priority, and RR" << std::endl;
+    std::cout << "Returning each task's turnaround and waiting time, as well as the average for that specific scheduling algorithm." << std::endl;
+    std::cout << "Compile the specific algorithm using 'make (Enter Algorithm Here)' with the algorithms being 'FCFS', 'SJF', 'Priority', 'RR'." << std::endl;
+    std::cout << "For RR, to enter the desired Quantum Slice, enter it as an argument after the scheduler file." << std::endl;
+    std::cout << "Example: './rr scheduler.txt 9' for a Quantum Slice of 9." << std::endl;
     std::cout << "=================================" << std::endl;
 
     FILE *in;
