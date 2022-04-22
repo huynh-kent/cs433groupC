@@ -96,7 +96,7 @@ void *producer(void *param) {
     while (1)
     {
         // sleep for a random period of time
-        sleep(rand()%3);
+        usleep(rand()%10000000);
         // generate random number w/ seed
         item = rand_r(&seed);
         sem_wait(&empty);
@@ -117,7 +117,7 @@ void *consumer(void *param) {
     while (1) 
     {
         // sleep for a random period of time
-        sleep(rand()%3);
+        usleep(rand()%10000000);
         // generate random number
         item = rand_r(&seed);
         sem_wait(&full);
