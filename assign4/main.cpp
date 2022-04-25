@@ -35,7 +35,6 @@ Please clearly describe the additional work you do in the report if you want to 
 #include <semaphore.h>
 #include "buffer.h"
 #include <time.h>
-#include <string.h>
 
 // create locks
 sem_t empty;
@@ -114,13 +113,14 @@ int remove_item(buffer_item *item)
 
 void *producer(void *param) {
     buffer_item item;
-    //unsigned int seed = time(NULL);
+    unsigned int seed = time(NULL);
     while (1)
     {
         // sleep for a random period of time
-        usleep(rand()%10000000);
+        usleep(rand_r(&seed)%10000000);
         // generate random number w/ seed
         item = rand();
+        // insert item
         insert_item(item);
         if (insert_item(item)) fprintf(stderr, "producer - report error condition\n");
         else printf("producer produced %d\n", item);
@@ -129,14 +129,14 @@ void *producer(void *param) {
 
 void *consumer(void *param) {
     buffer_item item;
-    //unsigned int seed = time(NULL);
+    unsigned int seed = time(NULL);
     while (1) 
     {
         // sleep for a random period of time
-        usleep(rand()%10000000);
-        // generate random number
-        //item = rand_r(&seed);
+        usleep(rand_r(&seed)%10000000);
+        // remove item
         remove_item(&item);
+
         if (remove_item(&item)) fprintf(stderr, "consumer - report error condition\n");
         else printf("consumer consumed %d\n", item);
     }
