@@ -8,8 +8,6 @@
 #include "buffer.h"
 #include <time.h>
 
-using namespace std;
-
 // create locks
 sem_t empty;
 sem_t full;
@@ -78,7 +76,6 @@ int remove_item(buffer_item *item)
 // producer thread
 void *producer(void *param) {
     buffer_item item;
-    int not_success = 0;
     while (1)
     {
         // sleep for a random period of time
@@ -90,23 +87,19 @@ void *producer(void *param) {
 
         sem_wait(&empty);
         pthread_mutex_lock(&mutexlock);
-
         // enter critical section
         // insert item
-        not_success = insert_item(item);
+        if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
+        else printf("Producer produced item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
         pthread_mutex_unlock(&mutexlock);
         sem_post(&full);
         // exit critical section
-
-        if (not_success) fprintf(stderr, "Producer - report error condition\n");
-        else printf("Producer produced item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
     }
 }
 
 // consumer thread
 void *consumer(void *param) {
     buffer_item item;
-    int not_success = 0;
     while (1) 
     {
         // sleep for a random period of time
@@ -114,16 +107,13 @@ void *consumer(void *param) {
 
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
-
         // enter critical section
         // remove item
-        not_success = remove_item(&item);
+        if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
+        else printf("Consumer consumed item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
         pthread_mutex_unlock(&mutexlock);
         sem_post(&empty);
         // exit critical section
-
-        if (not_success) fprintf(stderr, "Consumer - report error condition\n");
-        else printf("Consumer consumed item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
     }
 
 }
