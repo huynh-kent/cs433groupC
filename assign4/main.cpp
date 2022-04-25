@@ -119,7 +119,7 @@ void *producer(void *param) {
         // sleep for a random period of time
         usleep(rand_r(&seed)%10000000);
         // generate random number w/ seed
-        item = rand();
+        item = rand()%1000;
         // insert item
         insert_item(item);
         if (insert_item(item)) fprintf(stderr, "producer - report error condition\n");
@@ -129,7 +129,7 @@ void *producer(void *param) {
 
 void *consumer(void *param) {
     buffer_item item;
-    unsigned int seed = time(NULL);
+    unsigned int seed = time(NULL)/2;
     while (1) 
     {
         // sleep for a random period of time
