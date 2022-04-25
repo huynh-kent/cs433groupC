@@ -107,22 +107,22 @@ void *producer(void *param) {
     unsigned int seed = time(NULL);
     while (1)
     {
+        sem_wait(&empty);
+        pthread_mutex_lock(&mutexlock);
+        // enter critical section
         // sleep for a random period of time
         usleep(rand_r(&seed)%10000000);
         // generate random number w/ seed
         item = rand()%1000;
 
-        sem_wait(&empty);
-        pthread_mutex_lock(&mutexlock);
-        // enter critical section
         // insert item
         insert_item(item);
         pthread_mutex_unlock(&mutexlock);
         sem_post(&full);
         // exit critical section
 
-        if (insert_item(item)<0) fprintf(stderr, "Producer - report error condition\n");
-        else printf("Producer produced item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
+        if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
+        else printf("Producer produced item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 }
 
@@ -132,20 +132,20 @@ void *consumer(void *param) {
     unsigned int seed = time(NULL)/rand();
     while (1) 
     {
-        // sleep for a random period of time
-        usleep(rand_r(&seed)%10000000);
-
         // enter critical section
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
+        // sleep for a random period of time
+        usleep(rand_r(&seed)%10000000);
+
         // remove item
         remove_item(&item);
         pthread_mutex_unlock(&mutexlock);
         sem_post(&empty);
         // exit critical section
 
-        if (remove_item(&item)<0) fprintf(stderr, "Consumer - report error condition\n");
-        else printf("Consumer consumed item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
+        if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
+        else printf("Consumer consumed item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 
 }
