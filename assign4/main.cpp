@@ -128,7 +128,7 @@ void *producer(void *param) {
         // insert item
         insert_item(item);
         if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
-        else printf("Producer produced %d - Current Buffer - %d out of %d - Item #%d\n", item, in, BUFFER_SIZE, item);
+        else printf("Producer produced item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 }
 
@@ -144,7 +144,7 @@ void *consumer(void *param) {
         remove_item(&item);
 
         if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
-        else printf("Consumer consumed %d - Current Buffer - %d out of %d - Item #%d\n", item, out, BUFFER_SIZE, item);
+        else printf("Consumer consumed item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 
 }
