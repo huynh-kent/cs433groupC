@@ -108,7 +108,7 @@ void *consumer(void *param) {
     while (1) 
     {
         // sleep for a random period of time
-        unsigned int seed = time(NULL)/rand();
+        unsigned int seed = time(NULL)/2;
         usleep(rand_r(&seed)%10000000);
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
