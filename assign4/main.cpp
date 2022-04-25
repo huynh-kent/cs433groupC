@@ -46,9 +46,6 @@ pthread_mutex_t mutexlock;
 int in, out, count;
 buffer_item buffer[BUFFER_SIZE];
 
-// random var
-void rand = srand(time(NULL));
-
 void init_buffer()
 {
     pthread_mutex_init(&mutexlock, NULL);
