@@ -188,7 +188,7 @@ int main(int argc, char *argv[]) {
     pthread_t consumers[args[3]];
     for (int j=0; j<args[3]; j++)
     {
-        int cons_id = j + 1
+        int cons_id = j + 1;
         pthread_create(&consumers[j], NULL, consumer, &cons_id);
     }
     // 5. sleep
