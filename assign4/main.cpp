@@ -108,14 +108,13 @@ void *producer(void *param) {
     int not_success = 0;
     while (1)
     {
-        sem_wait(&empty);
-        pthread_mutex_lock(&mutexlock);
-        // enter critical section
         // sleep for a random period of time
         usleep(rand_r(&seed)%10000000);
-        // generate random number w/ seed
         item = rand()%1000;
+        sem_wait(&empty);
+        pthread_mutex_lock(&mutexlock);
 
+        // enter critical section
         // insert item
         not_success = insert_item(item);
         pthread_mutex_unlock(&mutexlock);
@@ -134,12 +133,12 @@ void *consumer(void *param) {
     int not_success = 0;
     while (1) 
     {
-        // enter critical section
-        sem_wait(&full);
-        pthread_mutex_lock(&mutexlock);
         // sleep for a random period of time
         usleep(rand_r(&seed)%10000000);
+        sem_wait(&full);
+        pthread_mutex_lock(&mutexlock);
 
+        // enter critical section
         // remove item
         not_success = remove_item(&item);
         pthread_mutex_unlock(&mutexlock);
