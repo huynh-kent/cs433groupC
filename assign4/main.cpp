@@ -181,13 +181,15 @@ int main(int argc, char *argv[]) {
     pthread_t producers[args[2]];
     for (int i=0; i<args[2]; i++)
     {
-        pthread_create(&producers[i], NULL, producer, NULL);
+        int prod_id = i + 1;
+        pthread_create(&producers[i], NULL, producer, &prod_id);
     }
     // 4. create consumer threads
     pthread_t consumers[args[3]];
     for (int j=0; j<args[3]; j++)
     {
-        pthread_create(&consumers[j], NULL, consumer, NULL);
+        int cons_id = j + 1
+        pthread_create(&consumers[j], NULL, consumer, &cons_id);
     }
     // 5. sleep
     sleep(args[1]);
