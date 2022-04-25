@@ -105,6 +105,7 @@ int remove_item(buffer_item *item)
 void *producer(void *param) {
     buffer_item item;
     unsigned int seed = time(NULL);
+    int not_success = 0;
     while (1)
     {
         sem_wait(&empty);
@@ -116,12 +117,12 @@ void *producer(void *param) {
         item = rand()%1000;
 
         // insert item
-        insert_item(item);
+        not_success = insert_item(item);
         pthread_mutex_unlock(&mutexlock);
         sem_post(&full);
         // exit critical section
 
-        if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
+        if (not_success) fprintf(stderr, "Producer - report error condition\n");
         else printf("Producer produced item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 }
@@ -130,6 +131,7 @@ void *producer(void *param) {
 void *consumer(void *param) {
     buffer_item item;
     unsigned int seed = time(NULL)/rand();
+    int not_success = 0;
     while (1) 
     {
         // enter critical section
@@ -139,12 +141,12 @@ void *consumer(void *param) {
         usleep(rand_r(&seed)%10000000);
 
         // remove item
-        remove_item(&item);
+        not_success = remove_item(&item);
         pthread_mutex_unlock(&mutexlock);
         sem_post(&empty);
         // exit critical section
 
-        if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
+        if (not_success) fprintf(stderr, "Consumer - report error condition\n");
         else printf("Consumer consumed item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 
