@@ -1,35 +1,7 @@
-/*
-Implement Project 4 "The Producer-Consumer Problem" in chapter 7 of the textbook (P43 to P45 of eBook)
-
-Using the Pthreads API
-Should allow creating multiple producer and consumer threads
-Three parameters are passed on the command line
-    1. How long the main thread sleep before terminating (in seconds)
-    2. The number of producer threads
-    3. The number of consumer threads
-
-Keep track and print out the content of the shared buffer during the execution of the threads when an item is added or consumed
-
-For example, print message like
-    'item 2 inserted by a producer. the current content of the buffer is [4,5,2].'
-
-Items should be removed in their order of being added, FIRST IN FIRST OUT.
-Make Sure the program works correctly
-Include <pthread.h> header file and link the pthread library using "-lpthread"
-
-The producer and consumer threads should sleep for some random time but shouldnt probably sleep for more than one second.
-You may use the 'usleep()' function like 'usleep(rand()%10000000);' where usleep() functions sleeps for some number of microseconds.
-
-EXTRA CREDIT:
-You may gain extra credits for this assignment by doing more work beyond the requirements,
-for example implementing the bounded buffer as a monitor using mutex and condition variables or other things interesting or creative.
-The extra credit depends on the amount of extra work you do but will be no more than 10 points.
-Please clearly describe the additional work you do in the report if you want to claim extra credits.
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 // import pthreads & semaphores
 #include <pthread.h>
 #include <semaphore.h>
