@@ -34,6 +34,14 @@ void destroy_buffer()
     pthread_mutex_destroy(&mutexlock);
 }
 
+void print_buffer()
+{
+    for (int i=0; i<buffer_count; ++i)
+    {
+        printf("%d, ", buffer[i]);
+    }
+}
+
 // insert item
 int insert_item(buffer_item item)
 {
@@ -90,7 +98,11 @@ void *producer(void *param) {
         // enter critical section
         // insert item
         if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
-        else printf("Producer produced item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
+        else {
+            printf("Producer produced item #%d - Current Buffer Content - [", item);
+            print_buffer();
+            printf("]\n");
+        } 
         pthread_mutex_unlock(&mutexlock);
         sem_post(&full);
         // exit critical section
@@ -110,7 +122,11 @@ void *consumer(void *param) {
         // enter critical section
         // remove item
         if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
-        else printf("Consumer consumed item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
+        else {
+            printf("Consumer produced item #%d - Current Buffer Content - [", item);
+            print_buffer();
+            printf("]\n");
+        }
         pthread_mutex_unlock(&mutexlock);
         sem_post(&empty);
         // exit critical section
