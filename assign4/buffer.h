@@ -1,4 +1,4 @@
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 5
 typedef int buffer_item;
 
 void init_buffer();

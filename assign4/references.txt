@@ -1,1 +1,8 @@
 assign4
+
+pthreads -
+https://www.geeksforgeeks.org/thread-functions-in-c-c/
+pthread mutex lock -
+https://www.geeksforgeeks.org/mutex-lock-for-linux-thread-synchronization/
+semaphores -
+http://www.csc.villanova.edu/~mdamian/threads/posixsem.html

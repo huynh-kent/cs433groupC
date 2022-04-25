@@ -35,6 +35,9 @@ Please clearly describe the additional work you do in the report if you want to 
 #include <semaphore.h>
 #include "buffer.h"
 #include <time.h>
+#include <iostream>
+
+using namespace std;
 
 // create locks
 sem_t empty;
@@ -42,7 +45,7 @@ sem_t full;
 pthread_mutex_t mutexlock;
 
 // buffer variables
-int in, out, count;
+int in, out, buffer_count;
 buffer_item buffer[BUFFER_SIZE];
 
 // initialize buffer
@@ -51,7 +54,7 @@ void init_buffer()
     pthread_mutex_init(&mutexlock, NULL);
     sem_init(&empty, 0, BUFFER_SIZE);
     sem_init(&full, 0, 0);
-    in = out = count = 0;
+    in = out = buffer_count = 0;
 }
 
 // destroy buffer
@@ -66,11 +69,11 @@ void destroy_buffer()
 int insert_item(buffer_item item)
 {
     // insert item into buffer
-    if (count != BUFFER_SIZE)
+    if (buffer_count != BUFFER_SIZE)
     {   // return 0 if successful
         buffer[in] = item;
         in = (in+1)%(BUFFER_SIZE+1);
-        count++;
+        buffer_count++;
 
         return 0;  
     }
@@ -86,11 +89,11 @@ int insert_item(buffer_item item)
 int remove_item(buffer_item *item)
 {
     // remove an object from buffer
-    if (count!=0)
+    if (buffer_count!=0)
     {   // placing it in item, return 0 if successful
         *item = buffer[out];
         out = (out+1)%(BUFFER_SIZE+1);
-        count--;
+        buffer_count--;
         return 0;
     }
     else // otherwise, return -1 indicating an error condition
@@ -104,13 +107,13 @@ int remove_item(buffer_item *item)
 // producer thread
 void *producer(void *param) {
     buffer_item item;
-    unsigned int seed = time(NULL);
     int not_success = 0;
     while (1)
     {
         // sleep for a random period of time
+        unsigned int seed = time(NULL);
         usleep(rand_r(&seed)%10000000);
-        item = rand()%1000;
+        item = (rand()%1000)+1; // item #1-1000
         sem_wait(&empty);
         pthread_mutex_lock(&mutexlock);
 
@@ -122,18 +125,18 @@ void *producer(void *param) {
         // exit critical section
 
         if (not_success) fprintf(stderr, "Producer - report error condition\n");
-        else printf("Producer produced item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
+        else printf("Producer produced item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
     }
 }
 
 // consumer thread
 void *consumer(void *param) {
     buffer_item item;
-    unsigned int seed = time(NULL)/rand();
     int not_success = 0;
     while (1) 
     {
         // sleep for a random period of time
+        unsigned int seed = time(NULL)/rand();
         usleep(rand_r(&seed)%10000000);
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
@@ -146,12 +149,25 @@ void *consumer(void *param) {
         // exit critical section
 
         if (not_success) fprintf(stderr, "Consumer - report error condition\n");
-        else printf("Consumer consumed item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
+        else printf("Consumer consumed item #%d - Current Buffer Content - %d out of %d - Item #%d\n", item, buffer_count, BUFFER_SIZE, item);
     }
 
 }
 
 int main(int argc, char *argv[]) {
+    std::cout << "CS 433 Programming assignment 4" << std::endl;
+    std::cout << "Authors: Kent Huynh, Daniel Martinez, and Raymond Quach" << std::endl;
+    std::cout << "Date: 04/26/2022" << std::endl;
+    std::cout << "Course: CS433 (Operating Systems)" << std::endl;
+    std::cout << "Description : Solving the Producer-Consumer Problem" << std::endl;
+    std::cout << "Creates Producer and Consumer threads that have a shared buffer" << std::endl;
+    std::cout << "The buffer has a default size of 5 (changeable in the buffer.h file)" << std::endl;
+    std::cout << "The program takes arguments of #ofSeconds, #ofProducers, #ofConsumers" << std::endl;
+    std::cout << "#ofSeconds = How long main program waits before exiting" << std::endl;
+    std::cout << "#ofProducers = How many producers are created" << std::endl;
+    std::cout << "#ofConsumers = How many consumers are created" << std::endl;
+    std::cout << "Example: './prog4 100 2 2' have 2 producers and 2 consumers run for 100 seconds" << std::endl;
+    std::cout << "=================================" << std::endl;
 /*
     1. get commmand line arguments argv[1], argv[2], argv[3]
     2. init buffer
