@@ -82,7 +82,7 @@ void *producer(void *param) {
     while (1)
     {
         // sleep for a random period of time
-        unsigned int seed = rand();
+        unsigned int seed = time(NULL);
         usleep(rand_r(&seed)%10000000);
         //usleep(rand()%1000000);
 
@@ -110,8 +110,6 @@ void *consumer(void *param) {
     while (1) 
     {
         // sleep for a random period of time
-        //unsigned int seed = time(NULL)/2;
-        //usleep(rand_r(&seed)%10000000);
         usleep(rand()%1000000);
 
         sem_wait(&full);
