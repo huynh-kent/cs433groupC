@@ -65,25 +65,18 @@ void destroy_buffer()
 // insert item
 int insert_item(buffer_item item)
 {
-    sem_wait(&empty);
-    pthread_mutex_lock(&mutexlock);
-    // enter critical section
-
     // insert item into buffer
     if (count != BUFFER_SIZE)
     {   // return 0 if successful
         buffer[in] = item;
         in = (in+1)%(BUFFER_SIZE+1);
         count++;
-        pthread_mutex_unlock(&mutexlock);
-        sem_post(&full);
+
         return 0;  
     }
     else // otherwise, return -1 indicating an error condition
     {
         printf("Buffer is FULL\n");
-        pthread_mutex_unlock(&mutexlock);
-        sem_post(&full);
         return -1;
     }
     // exit critical section
@@ -92,27 +85,20 @@ int insert_item(buffer_item item)
 // remove item
 int remove_item(buffer_item *item)
 {
-    sem_wait(&full);
-    pthread_mutex_lock(&mutexlock);
-    // enter critical section
     // remove an object from buffer
     if (count!=0)
     {   // placing it in item, return 0 if successful
         *item = buffer[out];
         out = (out+1)%(BUFFER_SIZE+1);
         count--;
-        pthread_mutex_unlock(&mutexlock);
-        sem_post(&empty);
         return 0;
     }
     else // otherwise, return -1 indicating an error condition
     {
         printf("Buffer is EMPTY\n");
-        pthread_mutex_unlock(&mutexlock);
-        sem_post(&empty);
+
         return -1;
     }
-    // exit critical section
 }
 
 // producer thread
@@ -125,8 +111,16 @@ void *producer(void *param) {
         usleep(rand_r(&seed)%10000000);
         // generate random number w/ seed
         item = rand()%1000;
+
+        sem_wait(&empty);
+        pthread_mutex_lock(&mutexlock);
+        // enter critical section
         // insert item
         insert_item(item);
+        pthread_mutex_unlock(&mutexlock);
+        sem_post(&full);
+        // exit critical section
+
         if (insert_item(item)<0) fprintf(stderr, "Producer - report error condition\n");
         else printf("Producer produced item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
@@ -140,8 +134,15 @@ void *consumer(void *param) {
     {
         // sleep for a random period of time
         usleep(rand_r(&seed)%10000000);
+
+        // enter critical section
+        sem_wait(&full);
+        pthread_mutex_lock(&mutexlock);
         // remove item
         remove_item(&item);
+        pthread_mutex_unlock(&mutexlock);
+        sem_post(&empty);
+        // exit critical section
 
         if (remove_item(&item)<0) fprintf(stderr, "Consumer - report error condition\n");
         else printf("Consumer consumed item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
