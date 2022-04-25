@@ -129,7 +129,7 @@ void *producer(void *param) {
 
 void *consumer(void *param) {
     buffer_item item;
-    unsigned int seed = time(NULL);
+    //unsigned int seed = time(NULL);
     while (1) 
     {
         // sleep for a random period of time
