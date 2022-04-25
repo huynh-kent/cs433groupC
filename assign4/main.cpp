@@ -79,12 +79,12 @@ int remove_item(buffer_item *item)
 void *producer(void *param) {
     buffer_item item;
     int not_success = 0;
+    unsigned int seed = time(NULL);
     while (1)
     {
         // sleep for a random period of time
-        //unsigned int seed = time(NULL);
-        //usleep(rand_r(&seed)%10000000);
-        usleep(rand()%1000000);
+        usleep(rand_r(&seed)%10000000);
+        //usleep(rand()%1000000);
 
         item = (rand()%1000)+1; // item #1-1000
 
