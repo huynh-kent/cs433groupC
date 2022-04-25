@@ -127,7 +127,7 @@ void *producer(void *param) {
         item = rand()%1000;
         // insert item
         insert_item(item);
-        if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
+        if (insert_item(item)<0) fprintf(stderr, "Producer - report error condition\n");
         else printf("Producer produced item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 }
@@ -143,7 +143,7 @@ void *consumer(void *param) {
         // remove item
         remove_item(&item);
 
-        if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
+        if (remove_item(&item)<0) fprintf(stderr, "Consumer - report error condition\n");
         else printf("Consumer consumed item #%d - New Buffer - %d out of %d - Item #%d\n", item, count, BUFFER_SIZE, item);
     }
 
