@@ -45,6 +45,7 @@ pthread_mutex_t mutexlock;
 int in, out, count;
 buffer_item buffer[BUFFER_SIZE];
 
+// initialize buffer
 void init_buffer()
 {
     pthread_mutex_init(&mutexlock, NULL);
@@ -53,6 +54,7 @@ void init_buffer()
     in = out = count = 0;
 }
 
+// destroy buffer
 void destroy_buffer()
 {
     sem_destroy(&empty);
@@ -60,6 +62,7 @@ void destroy_buffer()
     pthread_mutex_destroy(&mutexlock);
 }
 
+// insert item
 int insert_item(buffer_item item)
 {
     sem_wait(&empty);
@@ -86,6 +89,7 @@ int insert_item(buffer_item item)
     // exit critical section
 }
 
+// remove item
 int remove_item(buffer_item *item)
 {
     sem_wait(&full);
@@ -111,6 +115,7 @@ int remove_item(buffer_item *item)
     // exit critical section
 }
 
+// producer thread
 void *producer(void *param) {
     buffer_item item;
     unsigned int seed = time(NULL);
@@ -122,14 +127,15 @@ void *producer(void *param) {
         item = rand()%1000;
         // insert item
         insert_item(item);
-        if (insert_item(item)) fprintf(stderr, "producer - report error condition\n");
-        else printf("producer produced %d\n", item);
+        if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
+        else printf("Producer produced %d - Current Buffer - %d out of %d - Item #%d\n", item, in, BUFFER_SIZE, item);
     }
 }
 
+// consumer thread
 void *consumer(void *param) {
     buffer_item item;
-    unsigned int seed = time(NULL)/2;
+    unsigned int seed = time(NULL)/rand();
     while (1) 
     {
         // sleep for a random period of time
@@ -137,12 +143,11 @@ void *consumer(void *param) {
         // remove item
         remove_item(&item);
 
-        if (remove_item(&item)) fprintf(stderr, "consumer - report error condition\n");
-        else printf("consumer consumed %d\n", item);
+        if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
+        else printf("Consumer consumed %d - Current Buffer - %d out of %d - Item #%d\n", item, out, BUFFER_SIZE, item);
     }
 
 }
-
 
 int main(int argc, char *argv[]) {
 /*
@@ -156,7 +161,7 @@ int main(int argc, char *argv[]) {
     // 1. get command line arguments argv[1,2,3]
     if (argc != 4)
     {
-        fprintf(stderr, "invalid");
+        fprintf(stderr, "Invalid Argument Format, Try Again.\n");
         return -1;
     }
 
@@ -172,7 +177,7 @@ int main(int argc, char *argv[]) {
     {
         if (atoi(argv[i])<0)
         {
-            fprintf(stderr, "invalid argument");
+            fprintf(stderr, "Invalid Argument, Positive Integers Only.\n");
             return -1;
         }
     }
