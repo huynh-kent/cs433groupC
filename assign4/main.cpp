@@ -7,7 +7,6 @@
 #include <semaphore.h>
 #include "buffer.h"
 #include <time.h>
-#include <iostream>
 
 using namespace std;
 
@@ -85,7 +84,7 @@ void *producer(void *param) {
         // sleep for a random period of time
         unsigned int seed = time(NULL);
         usleep(rand_r(&seed)%10000000);
-        
+
         item = (rand()%1000)+1; // item #1-1000
 
         sem_wait(&empty);
@@ -129,19 +128,19 @@ void *consumer(void *param) {
 }
 
 int main(int argc, char *argv[]) {
-    std::cout << "CS 433 Programming assignment 4" << std::endl;
-    std::cout << "Authors: Kent Huynh, Daniel Martinez, and Raymond Quach" << std::endl;
-    std::cout << "Date: 04/26/2022" << std::endl;
-    std::cout << "Course: CS433 (Operating Systems)" << std::endl;
-    std::cout << "Description : Solving the Producer-Consumer Problem" << std::endl;
-    std::cout << "Creates Producer and Consumer threads that have a shared buffer" << std::endl;
-    std::cout << "The buffer has a default size of 5 (changeable in the buffer.h file)" << std::endl;
-    std::cout << "The program takes arguments of #ofSeconds, #ofProducers, #ofConsumers" << std::endl;
-    std::cout << "#ofSeconds = How long main program waits before exiting" << std::endl;
-    std::cout << "#ofProducers = How many producers are created" << std::endl;
-    std::cout << "#ofConsumers = How many consumers are created" << std::endl;
-    std::cout << "Example: './prog4 100 2 2' have 2 producers and 2 consumers run for 100 seconds" << std::endl;
-    std::cout << "=================================" << std::endl;
+    printf("CS 433 Programming assignment 4");
+    printf("Authors: Kent Huynh, Daniel Martinez, and Raymond Quach");
+    printf("Date: 04/26/2022");
+    printf("Course: CS433 (Operating Systems)");
+    printf("Description : Solving the Producer-Consumer Problem");
+    printf("Creates Producer and Consumer threads that have a shared buffer");
+    printf("The buffer has a default size of 5 (changeable in the buffer.h file)");
+    printf("The program takes arguments of #ofSeconds, #ofProducers, #ofConsumers");
+    printf("#ofSeconds = How long main program waits before exiting");
+    printf("#ofProducers = How many producers are created");
+    printf("#ofConsumers = How many consumers are created");
+    printf("Example: './prog4 100 2 2' have 2 producers and 2 consumers run for 100 seconds");
+    printf("=================================");
 /*
     1. get commmand line arguments argv[1], argv[2], argv[3]
     2. init buffer
