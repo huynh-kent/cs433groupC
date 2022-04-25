@@ -34,19 +34,21 @@ Please clearly describe the additional work you do in the report if you want to 
 #include <pthread.h>
 #include <semaphore.h>
 #include "buffer.h"
+#include <time.h>
+#include <string.h>
 
 // create locks
 sem_t empty;
 sem_t full;
 pthread_mutex_t mutexlock;
 
+// buffer variables
 int in, out, count;
 buffer_item buffer[BUFFER_SIZE];
 
+// random var
+void rand = srand(time(NULL));
 
-// thread id & attributes
-//pthread_t tid;
-//pthread_attr_t attr;
 void init_buffer()
 {
     pthread_mutex_init(&mutexlock, NULL);
@@ -55,58 +57,75 @@ void init_buffer()
     in = out = count = 0;
 }
 
+void destroy_buffer()
+{
+    sem_destroy(&empty);
+    sem_destroy(&full);
+    pthread_mutex_destroy(&mutexlock);
+}
+
 int insert_item(buffer_item item)
 {
+    sem_wait(&empty);
+    pthread_mutex_lock(&mutexlock);
+    // enter critical section
+
     // insert item into buffer
     if (count != BUFFER_SIZE)
     {   // return 0 if successful
         buffer[in] = item;
-        in = (in+1)%BUFFER_SIZE;
+        in = (in+1)%(BUFFER_SIZE+1);
         count++;
+        pthread_mutex_unlock(&mutexlock);
+        sem_post(&full);
         return 0;  
     }
     else // otherwise, return -1 indicating an error condition
     {
         printf("Buffer is FULL\n");
+        pthread_mutex_unlock(&mutexlock);
+        sem_post(&full);
         return -1;
     }
-
+    // exit critical section
 }
 
 int remove_item(buffer_item *item)
 {
+    sem_wait(&full);
+    pthread_mutex_lock(&mutexlock);
+    // enter critical section
     // remove an object from buffer
     if (count!=0)
     {   // placing it in item, return 0 if successful
         *item = buffer[out];
-        out = (out+1)%BUFFER_SIZE;
+        out = (out+1)%(BUFFER_SIZE+1);
         count--;
+        pthread_mutex_unlock(&mutexlock);
+        sem_post(&empty);
         return 0;
     }
     else // otherwise, return -1 indicating an error condition
     {
         printf("Buffer is EMPTY\n");
+        pthread_mutex_unlock(&mutexlock);
+        sem_post(&empty);
         return -1;
     }
+    // exit critical section
 }
 
 void *producer(void *param) {
     buffer_item item;
-    unsigned int seed = time(NULL);
+    //unsigned int seed = time(NULL);
     while (1)
     {
         // sleep for a random period of time
         usleep(rand()%10000000);
         // generate random number w/ seed
-        item = rand_r(&seed);
-        sem_wait(&empty);
-        pthread_mutex_lock(&mutexlock);
-        // enter critical section
+        item = rand();
         insert_item(item);
-        pthread_mutex_unlock(&mutexlock);
-        sem_post(&full);
-        // exit critical section
-        if (insert_item(item)) fprintf(stderr, "report error condition");
+        if (insert_item(item)) fprintf(stderr, "producer - report error condition\n");
         else printf("producer produced %d\n", item);
     }
 }
@@ -119,15 +138,9 @@ void *consumer(void *param) {
         // sleep for a random period of time
         usleep(rand()%10000000);
         // generate random number
-        item = rand_r(&seed);
-        sem_wait(&full);
-        pthread_mutex_lock(&mutexlock);
-        // enter critical section
+        //item = rand_r(&seed);
         remove_item(&item);
-        pthread_mutex_unlock(&mutexlock);
-        sem_post(&empty);
-        // exit critical section
-        if (remove_item(&item)) fprintf(stderr, "report error condition");
+        if (remove_item(&item)) fprintf(stderr, "consumer - report error condition\n");
         else printf("consumer consumed %d\n", item);
     }
 
@@ -135,16 +148,6 @@ void *consumer(void *param) {
 
 
 int main(int argc, char *argv[]) {
-// initialize the buffer and create the separate producer and consumer threads.
-
-// sleep for a period of time, terminate on wake up
-
-/* Three parameters are passed on the command line
-    1. How long the main thread sleep before terminating (in seconds)
-    2. The number of producer threads
-    3. The number of consumer threads
-*/
-
 /*
     1. get commmand line arguments argv[1], argv[2], argv[3]
     2. init buffer
@@ -188,12 +191,13 @@ int main(int argc, char *argv[]) {
     }
     // 4. create consumer threads
     pthread_t consumers[args[3]];
-    for (int i=0; i<args[3]; i++)
+    for (int j=0; j<args[3]; j++)
     {
-        pthread_create(&consumers[i], NULL, consumer, NULL);
+        pthread_create(&consumers[j], NULL, consumer, NULL);
     }
     // 5. sleep
     sleep(args[1]);
     // 6. exit
+    destroy_buffer();
     return 0;
 }
