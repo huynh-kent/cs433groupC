@@ -109,7 +109,8 @@ void *consumer(void *param) {
     while (1) 
     {
         // sleep for a random period of time
-        usleep(rand()%10000000);
+        unsigned int seed = time(NULL)/2;
+        usleep(rand_r(&seed)%10000000);
 
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
@@ -128,19 +129,19 @@ void *consumer(void *param) {
 }
 
 int main(int argc, char *argv[]) {
-    printf("CS 433 Programming assignment 4");
-    printf("Authors: Kent Huynh, Daniel Martinez, and Raymond Quach");
-    printf("Date: 04/26/2022");
-    printf("Course: CS433 (Operating Systems)");
-    printf("Description : Solving the Producer-Consumer Problem");
-    printf("Creates Producer and Consumer threads that have a shared buffer");
-    printf("The buffer has a default size of 5 (changeable in the buffer.h file)");
-    printf("The program takes arguments of #ofSeconds, #ofProducers, #ofConsumers");
-    printf("#ofSeconds = How long main program waits before exiting");
-    printf("#ofProducers = How many producers are created");
-    printf("#ofConsumers = How many consumers are created");
-    printf("Example: './prog4 100 2 2' have 2 producers and 2 consumers run for 100 seconds");
-    printf("=================================");
+    printf("CS 433 Programming assignment 4\n");
+    printf("Authors: Kent Huynh, Daniel Martinez, and Raymond Quach\n");
+    printf("Date: 04/26/2022\n");
+    printf("Course: CS433 (Operating Systems)\n");
+    printf("Description : Solving the Producer-Consumer Problem\n");
+    printf("Creates Producer and Consumer threads that have a shared buffer\n");
+    printf("The buffer has a default size of 5 (changeable in the buffer.h file)\n");
+    printf("The program takes arguments of #ofSeconds, #ofProducers, #ofConsumers\n");
+    printf("#ofSeconds = How long main program waits before exiting\n");
+    printf("#ofProducers = How many producers are created\n");
+    printf("#ofConsumers = How many consumers are created\n");
+    printf("Example: './prog4 100 2 2' have 2 producers and 2 consumers run for 100 seconds\n");
+    printf("=================================\n");
 /*
     1. get commmand line arguments argv[1], argv[2], argv[3]
     2. init buffer
