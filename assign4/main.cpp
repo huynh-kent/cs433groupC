@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
     printf("Course: CS433 (Operating Systems)\n");
     printf("Description : Solving the Producer-Consumer Problem\n");
     printf("Creates Producer and Consumer threads that have a shared buffer\n");
-    printf("Solve Producer-Consumer Problem using Sempahores & Mutex Locks");
+    printf("Solve Producer-Consumer Problem using Sempahores & Mutex Locks\n");
     printf("The buffer has a default size of 5 (changeable in the buffer.h file)\n");
     printf("The program takes arguments of #ofSeconds, #ofProducers, #ofConsumers\n");
     printf("#ofSeconds = How long main program waits before exiting\n");
