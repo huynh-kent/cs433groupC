@@ -38,7 +38,8 @@ void print_buffer()
 {
     for (int i=0; i<buffer_count; ++i)
     {
-        printf("%d, ", buffer[(out+i)%(BUFFER_SIZE)]);
+        if (i==0 | i == buffer_count-1) printf("%d", buffer[(out+i)%(BUFFER_SIZE)]);
+        else printf("%d, ", buffer[(out+i)%(BUFFER_SIZE)]);
     }
 }
 
@@ -101,7 +102,7 @@ void *producer(void *param) {
         else {
             printf("Producer produced item #%d - Current Buffer Content - [", item);
             print_buffer();
-            printf("]\n");
+            printf("]\n\n");
         } 
         pthread_mutex_unlock(&mutexlock);
         sem_post(&full);
@@ -125,7 +126,7 @@ void *consumer(void *param) {
         else {
             printf("Consumer produced item #%d - Current Buffer Content - [", item);
             print_buffer();
-            printf("]\n");
+            printf("]\n\n");
         }
         pthread_mutex_unlock(&mutexlock);
         sem_post(&empty);
