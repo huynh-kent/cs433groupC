@@ -36,10 +36,7 @@ void destroy_buffer()
 
 void print_buffer()
 {
-    for (int i=0; i<buffer_count; ++i)
-    {
-        printf("%d, ", buffer[i]);
-    }
+    
 }
 
 // insert item
@@ -68,7 +65,7 @@ int remove_item(buffer_item *item)
     // remove an object from buffer
     if (buffer_count!=0)
     {   // placing it in item, return 0 if successful
-        *item = NULL;
+        *item = buffer[out];
         out = (out+1)%(BUFFER_SIZE+1);
         buffer_count--;
         return 0;
@@ -100,7 +97,10 @@ void *producer(void *param) {
         if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
         else {
             printf("Producer produced item #%d - Current Buffer Content - [", item);
-            print_buffer();
+            for (int i=0; i<buffer_count; ++i)
+            {
+                printf("%d, ", buffer[i]);
+            }
             printf("]\n");
         } 
         pthread_mutex_unlock(&mutexlock);
@@ -124,7 +124,10 @@ void *consumer(void *param) {
         if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
         else {
             printf("Consumer produced item #%d - Current Buffer Content - [", item);
-            print_buffer();
+            for (int i=0; i<buffer_count; ++i)
+            {
+                printf("%d, ", buffer[i]);
+            }
             printf("]\n");
         }
         pthread_mutex_unlock(&mutexlock);
