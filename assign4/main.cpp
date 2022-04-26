@@ -68,7 +68,7 @@ int remove_item(buffer_item *item)
     // remove an object from buffer
     if (buffer_count!=0)
     {   // placing it in item, return 0 if successful
-        *item = buffer[out];
+        *item = NULL;
         out = (out+1)%(BUFFER_SIZE+1);
         buffer_count--;
         return 0;
