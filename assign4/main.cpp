@@ -36,7 +36,10 @@ void destroy_buffer()
 
 void print_buffer()
 {
-    
+    for (int i=0; i<buffer_count; ++i)
+    {
+        printf("%d, ", buffer[(out+i)%(BUFFER_SIZE+1)]);
+    }
 }
 
 // insert item
@@ -124,10 +127,7 @@ void *consumer(void *param) {
         if (remove_item(&item)) fprintf(stderr, "Consumer - Failed to remove item\n");
         else {
             printf("Consumer produced item #%d - Current Buffer Content - [", item);
-            for (int i=0; i<buffer_count; ++i)
-            {
-                printf("%d, ", buffer[i]);
-            }
+            print_buffer();
             printf("]\n");
         }
         pthread_mutex_unlock(&mutexlock);
