@@ -66,7 +66,6 @@ int remove_item(buffer_item *item)
     if (buffer_count!=0)
     {   // placing it in item, return 0 if successful
         *item = buffer[out];
-        buffer[out] = 0;
         out = (out+1)%(BUFFER_SIZE+1);
         buffer_count--;
         return 0;
@@ -189,7 +188,6 @@ int main(int argc, char *argv[]) {
 
     // 3. create producer threads
     pthread_t producers[args[2]];
-    //int prod_id[args[2]];
     for (int i=0; i<args[2]; i++)
     {
        // prod_id[i] = i + 1;
@@ -197,7 +195,6 @@ int main(int argc, char *argv[]) {
     }
     // 4. create consumer threads
     pthread_t consumers[args[3]];
-    //int cons_id[args[3]];
     for (int j=0; j<args[3]; j++)
     {
       //  cons_id[j] = j + 1;
