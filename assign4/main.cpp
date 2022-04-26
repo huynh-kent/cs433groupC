@@ -66,6 +66,7 @@ int remove_item(buffer_item *item)
     if (buffer_count!=0)
     {   // placing it in item, return 0 if successful
         *item = buffer[out];
+        buffer[out] = 0;
         out = (out+1)%(BUFFER_SIZE+1);
         buffer_count--;
         return 0;
@@ -94,7 +95,7 @@ void *producer(void *param) {
         pthread_mutex_lock(&mutexlock);
         // enter critical section
         // insert item
-        if (insert_item(item)) fprintf(stderr, "Producer - report error condition\n");
+        if (insert_item(item)) fprintf(stderr, "Producer - Failed to insert item\n");
         else {
             printf("Producer produced item #%d - Current Buffer Content - [", item);
             for (int i=0; i<buffer_count; ++i)
@@ -121,7 +122,7 @@ void *consumer(void *param) {
         pthread_mutex_lock(&mutexlock);
         // enter critical section
         // remove item
-        if (remove_item(&item)) fprintf(stderr, "Consumer - report error condition\n");
+        if (remove_item(&item)) fprintf(stderr, "Consumer - Failed to remove item\n");
         else {
             printf("Consumer produced item #%d - Current Buffer Content - [", item);
             for (int i=0; i<buffer_count; ++i)
