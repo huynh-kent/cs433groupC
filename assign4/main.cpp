@@ -92,7 +92,7 @@ void *producer(void *param) {
     {
         // sleep for a random period of time
         unsigned int seed = time(NULL)%100;
-        usleep(rand_r(&seed)%1000000);
+        usleep((rand_r(&seed)%1000000)+500000); // sleep for at least .5 seconds
         //usleep(rand()%1000000);
 
         item = (rand()%1000)+1; // item #1-1000
@@ -120,7 +120,7 @@ void *consumer(void *param) {
     {
         // sleep for a random period of time
         unsigned int seed = time(NULL)%78;
-        usleep(rand_r(&seed)%1000000);
+        usleep((rand_r(&seed)%1000000)+500000); // sleep for at least .5 seconds
 
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
