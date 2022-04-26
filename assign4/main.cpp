@@ -92,7 +92,7 @@ void *producer(void *param) {
     {
         // sleep for a random period of time
         unsigned int seed = time(NULL)%100;
-        usleep(rand_r(&seed)%10000000);
+        usleep(rand_r(&seed)%1000000);
         //usleep(rand()%1000000);
 
         item = (rand()%1000)+1; // item #1-1000
