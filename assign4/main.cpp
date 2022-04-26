@@ -34,6 +34,7 @@ void destroy_buffer()
     pthread_mutex_destroy(&mutexlock);
 }
 
+// print buffer content
 void print_buffer()
 {
     for (int i=0; i<buffer_count; ++i)
@@ -88,8 +89,8 @@ void *producer(void *param) {
     while (1)
     {
         // sleep for a random period of time
-        //unsigned int seed = time(NULL);
-        usleep(rand()%10000000);
+        unsigned int seed = time(NULL);
+        usleep(rand_r(&seed)%10000000);
         //usleep(rand()%1000000);
 
         item = (rand()%1000)+1; // item #1-1000
@@ -116,7 +117,9 @@ void *consumer(void *param) {
     while (1) 
     {
         // sleep for a random period of time
-        usleep(rand()%1000000);
+        unsigned int seed = time(NULL);
+        usleep(rand_r(&seed)%1000000);
+        //usleep(rand()%1000000);
 
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
