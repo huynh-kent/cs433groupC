@@ -117,9 +117,9 @@ void *consumer(void *param) {
     while (1) 
     {
         // sleep for a random period of time
-        unsigned int seed = time(NULL);
-        usleep(rand_r(&seed)%1000000);
-        //usleep(rand()%1000000);
+        //unsigned int seed = time(NULL);
+        // usleep(rand_r(&seed)%1000000);
+        usleep(rand()%1000000);
 
         sem_wait(&full);
         pthread_mutex_lock(&mutexlock);
@@ -127,7 +127,7 @@ void *consumer(void *param) {
         // remove item
         if (remove_item(&item)) fprintf(stderr, "Consumer - Failed to remove item\n");
         else {
-            printf("Consumer produced item #%d - Current Buffer Content - [", item);
+            printf("Consumer consumed item #%d - Current Buffer Content - [", item);
             print_buffer();
             printf("]\n\n");
         }
