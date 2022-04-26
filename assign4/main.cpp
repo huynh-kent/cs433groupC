@@ -89,7 +89,7 @@ void *producer(void *param) {
     while (1)
     {
         // sleep for a random period of time
-        unsigned int seed = time(NULL);
+        unsigned int seed = time(NULL)%100;
         usleep(rand_r(&seed)%10000000);
         //usleep(rand()%1000000);
 
@@ -191,18 +191,19 @@ int main(int argc, char *argv[]) {
     pthread_t producers[args[2]];
     for (int i=0; i<args[2]; i++)
     {
-       // prod_id[i] = i + 1;
         pthread_create(&producers[i], NULL, producer, NULL);
     }
+
     // 4. create consumer threads
     pthread_t consumers[args[3]];
     for (int j=0; j<args[3]; j++)
     {
-      //  cons_id[j] = j + 1;
         pthread_create(&consumers[j], NULL, consumer, NULL);
     }
+
     // 5. sleep
     sleep(args[1]);
+
     // 6. exit
     destroy_buffer();
     return 0;
