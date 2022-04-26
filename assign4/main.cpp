@@ -38,7 +38,7 @@ void print_buffer()
 {
     for (int i=0; i<buffer_count; ++i)
     {
-        printf("%d, ", buffer[(out+i)%(BUFFER_SIZE+1)]);
+        printf("%d, ", buffer[(out+i)%(BUFFER_SIZE)]);
     }
 }
 
@@ -49,7 +49,7 @@ int insert_item(buffer_item item)
     if (buffer_count != BUFFER_SIZE)
     {   // return 0 if successful
         buffer[in] = item;
-        in = (in+1)%(BUFFER_SIZE+1);
+        in = (in+1)%(BUFFER_SIZE);
         buffer_count++;
 
         return 0;  
@@ -69,7 +69,7 @@ int remove_item(buffer_item *item)
     if (buffer_count!=0)
     {   // placing it in item, return 0 if successful
         *item = buffer[out];
-        out = (out+1)%(BUFFER_SIZE+1);
+        out = (out+1)%(BUFFER_SIZE);
         buffer_count--;
         return 0;
     }
