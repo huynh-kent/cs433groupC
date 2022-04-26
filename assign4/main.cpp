@@ -100,10 +100,7 @@ void *producer(void *param) {
         if (insert_item(item)) fprintf(stderr, "Producer - Failed to insert item\n");
         else {
             printf("Producer produced item #%d - Current Buffer Content - [", item);
-            for (int i=0; i<buffer_count; ++i)
-            {
-                printf("%d, ", buffer[i]);
-            }
+            print_buffer();
             printf("]\n");
         } 
         pthread_mutex_unlock(&mutexlock);
