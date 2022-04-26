@@ -38,7 +38,7 @@ void print_buffer()
 {
     for (int i=0; i<buffer_count; ++i)
     {
-        if (i==0 | i == buffer_count-1) printf("%d", buffer[(out+i)%(BUFFER_SIZE)]);
+        if (i==0 || i == buffer_count-1) printf("%d", buffer[(out+i)%(BUFFER_SIZE)]);
         else printf("%d, ", buffer[(out+i)%(BUFFER_SIZE)]);
     }
 }
