@@ -7,7 +7,7 @@ CFLAGS = -g -Wall -std=c++11		# compilation flags: -g for debugging. Change to -
 LIB = -lm			# linked libraries	
 LDFLAGS = -L.			# link flags
 PROG = prog5			# target executable (output)
-SRCS = main.cpp       # .c or .cpp source files.
+SRCS = main.cpp pagetable.cpp  # .c or .cpp source files.
 OBJ = $(SRCS:.cpp=.o) 	# object files for the target. 
 
 all : $(PROG)

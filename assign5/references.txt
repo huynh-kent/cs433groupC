@@ -1,1 +1,5 @@
 references prog assignment 5
+
+vectors - https://www.geeksforgeeks.org/vector-in-cpp-stl/
+timer - https://www.delftstack.com/howto/cpp/cpp-timer/#:~:text=in%20C%2B%2B.-,Use%20the%20clock()%20Function%20to%20Implement%20a%20Timer%20in,to%20convert%20to%20several%20seconds.
+lru - https://www.geeksforgeeks.org/program-for-least-recently-used-lru-page-replacement-algorithm/

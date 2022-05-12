@@ -5,6 +5,11 @@
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <stdlib.h>
+#include "pagetable.h"
+#include <chrono>
+
+using namespace std;
 
 // Check if an integer is power of 2
 bool isPowerOfTwo(unsigned int x)
@@ -63,23 +68,218 @@ int main(int argc, char* argv[]) {
 	std::cout << "Number of pages = " << num_pages << std::endl; 
 	std::cout << "Number of physical frames = " << num_frames << std::endl;
 
+
+	clock_t start, stop; // timer
 	// Test 1: Read and simulate the small list of logical addresses from the input file "small_refs.txt"
 	std::cout <<"\n================================Test 1==================================================\n";
 	// TODO: Add your code here for test 1 that prints out logical page #, frame # and whether page fault for each logical address
-	
+	PageTable test1;
+
+	// read addresses from file
+	ifstream small_refs("small_refs.txt");
+	string address;
+	int page, log, frame;
+	bool fault;
+
+
+	while (getline(small_refs, address))
+	{
+		log = stoi(address);
+		page = log / page_size;
+		int temp = test1.checkTable(page);
+		if (temp!=-1)
+		{
+			frame = test1.table[temp].frame_num;
+			fault = false;
+		}
+		else 
+		{
+			frame = test1.frame_num_count;
+			fault = true;
+			test1.frame_num_count++;
+			test1.fault_count++;
+		}
+		PageEntry newPage(log, page, frame, fault);
+		test1.table.push_back(newPage);
+		test1.ref_count++;
+	}
+
+	test1.printTable(test1.ref_count, test1.fault_count, test1.replace_count);
+	test1.table.empty();
+
 	// Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
 	std::cout <<"\n================================Test 2==================================================\n";
+	ifstream fifo_refs("large_refs.txt");
+	string addr_fifo;
+	PageTable fifo;
 
 	std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
 	// TODO: Add your code to calculate number of page faults using FIFO replacement algorithm	
+	start = clock();
+
+	while (getline(fifo_refs, addr_fifo))
+	{
+		log = stoi(addr_fifo);
+		page = log / page_size;
+		int temp = fifo.checkTable(page);
+		if (temp!=-1)
+		{
+			frame = fifo.table[temp].frame_num;
+			fault = false;
+		}
+		else if (fifo.table.size() == num_frames)
+		{
+			fault = true;
+			fifo.fault_count++;
+
+			// find victim
+			int victim = fifo.fifo_n_lru_count;
+			fifo.fifo_n_lru_count++;
+			fifo.fifo_n_lru_count %= num_frames;
+
+			// make page with victim's frame
+			frame = fifo.table[victim].frame_num;
+			PageEntry newPage(log, page, frame, fault);
+
+			// replace victim page
+			fifo.table[victim] = newPage;
+			fifo.replace_count++;
+		}
+		else 
+		{
+			frame = fifo.frame_num_count%num_frames;
+			fault = true;
+			fifo.frame_num_count++;
+			fifo.fault_count++;
+			PageEntry newPage(log, page, frame, fault);
+			fifo.table.push_back(newPage);
+		}
+		
+		
+		fifo.ref_count++;
+	}
+
+	fifo.printReplacementStats(fifo.ref_count, fifo.fault_count, fifo.replace_count);
+	fifo.table.empty();
+	stop = clock();
+	printf("Time Taken: %.6f seconds\n", ((float) stop - start)/CLOCKS_PER_SEC);
 	// TODO: print the statistics and run-time
 
 	std::cout << "****************Simulate Random replacement****************************" << std::endl;
 	// TODO: Add your code to calculate number of page faults using Random replacement algorithm
 	// TODO: print the statistics and run-time
+	ifstream rand_refs("large_refs.txt");
+	PageTable rand_table;
+	string addr_rand;
+
+	start = clock();
+
+	while (getline(rand_refs, addr_rand))
+	{
+		log = stoi(addr_rand);
+		page = log / page_size;
+		int temp = rand_table.checkTable(page);
+		if (temp!=-1)
+		{
+			frame = rand_table.table[temp].frame_num;
+			fault = false;
+		}
+		else if (rand_table.table.size() == num_frames)
+		{
+			fault = true;
+			rand_table.fault_count++;
+
+			// find random victim
+			int victim = rand() % num_frames;
+
+			// make page with victim's frame
+			frame = rand_table.table[victim].frame_num;
+			PageEntry newPage(log, page, frame, fault);
+
+			// replace victim page
+			rand_table.table[victim] = newPage;
+			rand_table.replace_count++;
+		}
+		else 
+		{
+			frame = rand_table.frame_num_count%num_frames;
+			fault = true;
+			rand_table.frame_num_count++;
+			rand_table.fault_count++;
+			PageEntry newPage(log, page, frame, fault);
+			rand_table.table.push_back(newPage);
+		}
+		rand_table.ref_count++;
+	}
+	rand_table.printReplacementStats(rand_table.ref_count, rand_table.fault_count, rand_table.replace_count);
+	stop = clock();
+	printf("Time Taken: %.6f seconds\n", ((float) stop - start)/CLOCKS_PER_SEC);
 
 	std::cout << "****************Simulate LRU replacement****************************" << std::endl;
 	// TODO: Add your code to calculate number of page faults using LRU replacement algorithm
 	// TODO: print the statistics and run-time
+	ifstream lru_refs("large_refs.txt");
+	PageTable lru;
+	string addr_lru;
+
+	start = clock();
+
+	while (getline(lru_refs, addr_lru))
+	{
+		log = stoi(addr_lru);
+		page = log / page_size;
+		int temp = lru.checkTable(page);
+		int victim;
+
+		if (temp!=-1)
+		{
+			frame = lru.table[temp].frame_num;
+			fault = false;
+			lru.table[temp].lru_index = lru.lru_line; 
+		}
+		else if (lru.table.size() == num_frames)
+		{
+			fault = true;
+			lru.fault_count++;
+
+			// find victim
+			// check if page not recently used
+			if (lru.table[lru.fifo_n_lru_count].valid == false)
+			{
+				victim = lru.fifo_n_lru_count;
+				lru.fifo_n_lru_count++;
+				lru.fifo_n_lru_count %= num_frames;
+			}
+			// if not search for not recently used page
+			else
+			{
+				victim = lru.checkLRU();
+			}
+
+
+			// make page with victim's frame
+			frame = lru.table[victim].frame_num;
+			PageEntry newPage(log, page, frame, fault, lru.lru_line);
+
+			// replace victim page
+			lru.table[victim] = newPage;
+			lru.replace_count++;
+		}
+		else
+		{
+			frame = lru.frame_num_count%num_frames;
+			fault = true;
+			lru.frame_num_count++;
+			lru.fault_count++;
+			PageEntry newPage(log, page, frame, fault, lru.lru_line);
+			lru.table.push_back(newPage);
+		}
+		lru.ref_count++;
+	}
+	lru.printReplacementStats(lru.ref_count, lru.fault_count, lru.replace_count);
+	stop = clock();
+	printf("Time Taken: %.6f seconds\n", ((float) stop - start)/CLOCKS_PER_SEC);
+
+
 
 }

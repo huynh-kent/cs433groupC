@@ -1,1 +1,2 @@
-main.o: main.cpp
+main.o: main.cpp pagetable.h
+pagetable.o: pagetable.cpp pagetable.h
