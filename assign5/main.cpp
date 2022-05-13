@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "pagetable.h"
 #include <chrono>
+#include <algorithm>
 
 using namespace std;
 
@@ -96,6 +97,7 @@ int main(int argc, char* argv[]) {
 			frame = test1.table[temp].frame_num;
 			fault = false;
 		}
+		// if table not full and page not in table
 		else 
 		{
 			frame = test1.frame_num_count;
