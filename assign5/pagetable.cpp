@@ -5,8 +5,6 @@
 #include <vector>
 using namespace std;
 
-// TODO: Add your implementation of PageTable
-
 // page entry default constructor
 PageEntry::PageEntry()
 {
@@ -14,7 +12,6 @@ PageEntry::PageEntry()
     page_num = 0;
     frame_num = 0;
     valid = false;
-    lru_index = 0;
 }
 
 // page entry constructor 
@@ -26,38 +23,14 @@ PageEntry::PageEntry(int entry_log_addr, int page, int frame, bool fault)
     valid = fault;
 }
 
-// overload page entry constructor for lru 
-PageEntry::PageEntry(int entry_log_addr, int page, int frame, bool fault, int lru_ind)
-{
-    log_addr = entry_log_addr;
-    page_num = page;
-    frame_num = frame;
-    valid = fault;
-    lru_index = lru_ind;
-}
-
 // page table default constructor
 PageTable::PageTable()
 { 
-    page_size = 0;
-    mem_size = 0;
     frame_num_count = 0;
     ref_count = 0;
     fault_count = 0;
     replace_count = 0;
     fifo_n_lru_count = 0;
-    lru_line = 0;
-}
-
-// create table
-void PageTable::createTable(int table_size)
-{
-    // fill table with empty pages
-    for (int i = 0; i < table_size; ++i)
-    {
-        PageEntry emptyPage;
-        table.push_back(emptyPage);
-    }
 }
 
 // print table
@@ -72,6 +45,7 @@ void PageTable::printTable(int ref_count, int fault_count, int replace_count)
     printf("# of Page Replacements: %d\n", replace_count);
 }
 
+// print stats
 void PageTable::printReplacementStats(int ref_count, int fault_count, int replace_count)
 {
     printf("# of References: %d\n", ref_count);
@@ -94,18 +68,23 @@ int PageTable::checkTable(int page)
     return -1;
 }
 
-// check for LRU page and return its index 
-int PageTable::checkLRU()
+// create frame list for LRU
+void PageTable::setupFrameList(int num_frames)
 {
-    int index = fifo_n_lru_count;
-    int last_index = lru_line;
+    for (int i = 0; i < num_frames; ++i)
+    {
+        frame_list.push_back(i);
+    }
+}
+
+// check for LRU page and return its index 
+int PageTable::checkLRU(int frame)
+{
     for (int i = 0; i < table.size(); i++)
     {
-        if (table[i].lru_index < last_index)
-        {
-            index = i;
-            last_index = table[i].lru_index;
+        if (table.at(i).frame_num == frame)
+        {           
+            return i;
         }
     }
-    return index;
 }

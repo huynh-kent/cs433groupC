@@ -1,5 +1,9 @@
 references prog assignment 5
 
+note - changed makefile to include pagetable.cpp
+
 vectors - https://www.geeksforgeeks.org/vector-in-cpp-stl/
 timer - https://www.delftstack.com/howto/cpp/cpp-timer/#:~:text=in%20C%2B%2B.-,Use%20the%20clock()%20Function%20to%20Implement%20a%20Timer%20in,to%20convert%20to%20several%20seconds.
 lru - https://www.geeksforgeeks.org/program-for-least-recently-used-lru-page-replacement-algorithm/
+indexing vectors - https://thispointer.com/c-how-to-find-an-element-in-vector-and-get-its-index/
+removing element at index in vector - https://stackoverflow.com/questions/5768316/pop-a-specific-element-off-a-vector-in-cgit 
